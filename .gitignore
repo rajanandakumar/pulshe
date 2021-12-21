@@ -1,0 +1,10 @@
+# Distribution / packaging
+she
+
+# Temporary spreadsheets
+.xls
+.xlsm
+.xlsx
+
+# Compiled python files
+.pyc

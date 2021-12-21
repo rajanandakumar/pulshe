@@ -1,0 +1,27 @@
+class staffMember:
+    def __init__(self):
+        self.nStaff = 0
+        self.person = []
+        self.trainings = []
+        self.eList = []
+
+    def addPerson(self, person):
+        eMail = person["Email"]
+        if type(eMail) != type("") : return -1 # Critical error. Do not add this person.
+        if len(eMail) < 5 : return -2 # Critical error. Do not add this person.
+        if eMail in self.eList:
+            print("Person already added? : ", person["Title"], person["Forename"], person["Initials"],
+                 person["Surname"], person["Email"])
+            return -3
+        else:
+            self.eList.append(eMail)
+        self.person.insert(self.nStaff, person)
+        self.trainings.insert(self.nStaff, {})
+        self.nStaff = self.nStaff + 1
+        return 0
+
+    def myPrint(self):
+        print("Number of staff : ", self.nStaff)
+        for i in range(self.nStaff):
+            print(i, self.person[i]["Title"], self.person[i]["Forename"], self.person[i]["Initials"],
+                 self.person[i]["Surname"], self.person[i]["Email"])
