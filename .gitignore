@@ -1,10 +1,11 @@
 # Distribution / packaging
 she
+__pycache__
 
 # Temporary spreadsheets
-.xls
-.xlsm
-.xlsx
+*.xls
+*.xlsm
+*.xlsx
 
 # Compiled python files
-.pyc
+*.pyc
