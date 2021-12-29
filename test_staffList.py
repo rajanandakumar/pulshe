@@ -1,23 +1,33 @@
-import requests
-# --data-raw 'method=advancedSearch&department=PPD&outputForm=EXCEL' --output test5.xls
+import sys
+import pandas as pd
+import staff_training as st
+from get_files import get_cdr_file
 
-def get_file(loc="out.xls"):
-    url = 'https://cdr.stfc.ac.uk/siteDirectory/adSearch.do'
-    data = {'method': 'advancedSearch',
-    'department':'PPD',
-    'outputForm':'EXCEL'}
-    headers = {'Content-Type': 'application/x-www-form-urlencoded'}
+debug = False
+# debug = True
 
-    response = requests.post(url, data = data, headers=headers)
-    print(response.status_code)
-    if response.status_code == 200:
-        file = open("out.xls", "wb")
-        file.write(response.content)
-        file.close()
-        return True
-    else:
-        print("Problem accessing CDR data")
-        return False
+# First get the list of members of the department.
+cdr_file = "out_cdr.xls"
+department = sys.argv[1]
+status = get_cdr_file(loc=cdr_file, department=department)
+if not status:
+    print("Could not access CDR. Cannot create list of staff in ", department)
+    print("Exiting")
+    sys.exit(-2)
 
-if __name__ == 'main':
-    get_file()
+cdrList = pd.read_excel(cdr_file, engine='xlrd', sheet_name="SearchResults")
+deptStaff = st.staffMember()
+deptStaff.addDepartment(cdrList, debug=debug)
+
+# excel_file = "course_completion_report-6_3Sep21.xlsx"
+# # help(pd.read_excel)
+# aa = pd.read_excel(excel_file, engine='openpyxl')
+# # print(type(aa))
+# # print(dir(aa))
+# print(aa.head)
+# print(aa["User Last Name"])
+# # for index,a in aa.iterrows():
+# #     print(a["User Last Name"], a["User First Name"])
+# # print(aa.shape)
+# print(aa)
+
