@@ -17,3 +17,12 @@ def get_cdr_file(loc="out.xls", department="PPD"):
         print("Problem accessing CDR data. Request (https) response code :", response.status_code)
         return False
 
+
+def get_she_file(loc="", department="PPD"):
+    # Holding code for obtaining the spreadsheet from SHE in "some way". Probably dropped in place by Mauritz?
+    return True
+
+def get_totara_file(loc="", department="PPD"):
+    # Holding function for obtaining the spreadsheet from Totara.
+    # Apparently using sftp in some manner - to be understood over the meetings with DI.
+    return True

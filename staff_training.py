@@ -3,8 +3,8 @@ import pandas as pd
 class staffMember:
     def __init__(self):
         self.nStaff = 0
-        self.person = []
-        self.trainings = []
+        self.person = {}
+        self.trainings = {}
         self.eList = []
 
     def addPerson(self, person):
@@ -17,8 +17,9 @@ class staffMember:
             return -3
         else:
             self.eList.append(eMail)
-        self.person.insert(self.nStaff, person)
-        self.trainings.insert(self.nStaff, {})
+        # self.person.insert(self.nStaff, person)
+        self.person[eMail] = person
+        self.trainings[eMail] = {}
         self.nStaff = self.nStaff + 1
         return 0
 
@@ -27,7 +28,6 @@ class staffMember:
         for i in range(self.nStaff):
             print(i, self.person[i]["Title"], self.person[i]["Forename"], self.person[i]["Initials"],
                  self.person[i]["Surname"], self.person[i]["Email"])
-
 
     def addDepartment(self, cdrList, debug=False):
         for index,bx in cdrList.iterrows():
