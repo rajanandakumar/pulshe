@@ -2,7 +2,7 @@
 
 # Directory for virtual environment
 DIRECTORY="she"
-DEPARTMENT="PPD"
+# DEPARTMENT="PPD"
 
 # If the venv is not available, create it
 if [[ -d "$DIRECTORY" ]]
@@ -15,9 +15,10 @@ else
     source $DIRECTORY/bin/activate
     python3 -m pip install --upgrade pip
     python3 -m pip install requests pandas openpyxl xlrd
-    echo "Finished setting up environment. Next : SHE processing"
 fi
 
-python3 test_staffList.py $DEPARTMENT
+echo "Finished setting up environment. Next : SHE processing"
+# Configuration is in file configuration.py
+python3 test_staffList.py configuration.py
 
 deactivate
