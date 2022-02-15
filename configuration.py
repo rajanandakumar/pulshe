@@ -10,21 +10,20 @@ config = {
     "she_status" : 0,# Want only "Live" people
     # SHE trainings
     "she_trainings" : [
-        ("SHE Induction / Refresher", 12),
-        ("Display Screen Equipment", 13),
-        ("DSE Workstation Self Assessment (office PC)", 14),
-        ("SMH - HandleRite", 15),
-        ("Safe Manual Handling", 16),
-        ("Asbestos Essentials", 17),
-        ("Electrical Safety Essentials", 18),
-        ("Induction Refresher test", 19),
-        ("Fire test", 20),
-        ("DSE training test", 21),
-        ("DSE self assessment  test", 22),
-        ("Man Hand test", 23),
-        ("Asbestos Essentials", 24),
-        ("Electrical Safety Essentials", 25),
-        ("TEST for ALL Mandatory Training", 26)],
+        # ("Display Screen Equipment", 13),
+        # ("DSE Workstation Self Assessment (office PC)", 14),
+        # ("SMH - HandleRite", 15),
+        # ("Safe Manual Handling", 16),
+        # ("Asbestos Essentials", 17),
+        # ("Electrical Safety Essentials", 18),
+        ("Induction Refresher test", (19, 12)),
+        ("Fire test", (20,)),
+        ("DSE training test", (21, 13)),
+        ("DSE self assessment  test", (22, 14)),
+        ("Man Hand test", (23, 15)),
+        ("Asbestos Essentials", (24, 17)),
+        ("Electrical Safety Essentials", (25, 18)),
+        ("TEST for ALL Mandatory Training", (26,))],
     "AllTraining" : "TEST for ALL Mandatory Training", # The test for all mandatory training
 
     # Totara configuration

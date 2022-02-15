@@ -4,8 +4,8 @@ class staffMember:
         self.nStaff = 0
         self.department = department
         self.person = {} # The identifying details of the person
-        self.trainings_she = {} # The trainings associated to person from SHE
-        self.trainings_totara = {} # The trainings associated to person from Totara
+        self.trainings_status = {} # The trainings associated to person
+        self.trainings_date = {} # The last completed date of trainings if available
         self.eList = []  # List of all email addresses (sanity check for duplication)
 
         # List of all "names" = Forename Surname (Totara does not return initials?)
@@ -27,8 +27,8 @@ class staffMember:
         # UID = eMail
         UID = nName
         self.person[UID] = person
-        self.trainings_she[UID] = {}
-        self.trainings_totara[UID] = {}
+        self.trainings_status[UID] = {}
+        self.trainings_date[UID] = {}
         self.nList.append(nName)
         self.nStaff = self.nStaff + 1
         return 0
@@ -71,7 +71,13 @@ class staffMember:
                 continue
 
             # Add in the training records
-            for tr in trs: self.trainings_she[nName][tr[0]] = srv[tr[1]]
+            for tr in trs:
+                self.trainings_status[nName][tr[0]] = [srv[tr[1][0]], "SHE"]
+                if tr[0] != "Fire test" and not tr[0].startswith("TEST for ALL"):
+                    if len(tr[1]) == 2:
+                        self.trainings_date[nName][tr[0]] = [srv[tr[1][1]], "SHE"]
+                    else:
+                        print("Configuration Error : trainings list incorrect")
 
             # if self.trainings_she[nName][conf["AllTraining"]] != "OK":
             #     print(nName)
@@ -82,7 +88,8 @@ class staffMember:
         return 0
 
     def addTotaraRecords(self, totaraRecords, conf, debug=False):
-        courses = []
+        # courses = []
+        # c2 = []
         kount = 0
         for index, tR in totaraRecords.iterrows():
             kount = kount + 1
@@ -99,15 +106,38 @@ class staffMember:
 
             # Some clean up of the course names
             course = trd['Course Name']
+            # if course not in c2:
+            #     c2.append(course)
             if course.lower().startswith("sc") or course.startswith("Restored"):
                 course = course.split("-")[1].strip()
             if "BiteSize SHE for " in course:
                 course = course.split("BiteSize SHE for")[-1].strip()
 
+            okay = False
+            if course == "Asbestos Essentials":
+                trg = course
+                okay = True
+            elif course == "Manual Handling":
+                trg = "Man Hand test"
+                okay = True
+            elif course == "STFC Fire Safety Training":
+                trg = "Fire test"
+                okay = True
+            elif course == "RAL SHE Induction (Refresher)":
+                trg = "Induction Refresher test"
+                okay = True
+            elif course == "Display screen Equipment":
+                trg = "DSE training test"
+                okay = True
+            elif course == "Electrical Safety Essentials":
+                trg = "Electrical Safety Essentials"
+                okay = True
             # print("Name : %s, Course : %s, Status : %s" %(nName, course, trd['Completion Status']))
-            self.trainings_totara[nName][course] = trd['Completion Status']
-            if course not in courses:
-                courses.append(course)
+            if okay: self.trainings_status[nName][trg] = [trd['Completion Status'], "Totara"]
+            # if course not in courses:
+            #     courses.append(course)
         # for course in courses:
+        #     print(course)
+        # for course in c2:
         #     print(course)
         return 0
