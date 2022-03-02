@@ -10,20 +10,14 @@ config = {
     "she_status" : 0,# Want only "Live" people
     # SHE trainings
     "she_trainings" : [
-        # ("Display Screen Equipment", 13),
-        # ("DSE Workstation Self Assessment (office PC)", 14),
-        # ("SMH - HandleRite", 15),
-        # ("Safe Manual Handling", 16),
-        # ("Asbestos Essentials", 17),
-        # ("Electrical Safety Essentials", 18),
-        ("Induction Refresher test", (19, 12)),
-        ("Fire test", (20,)),
-        ("DSE training test", (21, 13)),
-        ("DSE self assessment  test", (22, 14)),
-        ("Man Hand test", (23, 15)),
-        ("Asbestos Essentials", (24, 17)),
-        ("Electrical Safety Essentials", (25, 18)),
-        ("TEST for ALL Mandatory Training", (26,))],
+        ("Induction Refresher test", (21, 12)), # For the master data sheet
+        ("Fire test", (22,13)),
+        ("DSE training test", (23, 14)),
+        ("DSE self assessment  test", (24, 15)),
+        ("Man Hand test", (25, 16)),
+        ("Asbestos Essentials", (27, 19)),
+        ("Electrical Safety Essentials", (28, 20)),
+        ("TEST for ALL Mandatory Training", (29,))],
     "AllTraining" : "TEST for ALL Mandatory Training", # The test for all mandatory training
 
     # Totara configuration

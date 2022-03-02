@@ -1,4 +1,4 @@
-import os, sys
+import os, sys, datetime
 import pandas as pd
 import staff_training as st
 from writeOutData import writeOutTrainings
@@ -34,18 +34,21 @@ status = get_she_file(loc=she_file, department=department, debug=debug)
 if not status:
     print("Exiting")
     sys.exit(-2)
-she_table = pd.read_excel(she_file, engine="openpyxl", sheet_name="Summary")
+# she_table = pd.read_excel(she_file, engine="openpyxl", sheet_name="Summary")
+she_table = pd.read_excel(she_file, engine="openpyxl", sheet_name="Master Data")
 deptStaff.addSHERecords(she_table, configuration.config, debug=debug)
 os.unlink(she_file) # Clean up
 
 # Get the totara statuses
-totara_file = "course_completion_report-6_3Sep21.xlsx"
+# totara_file = "course_completion_report-6_3Sep21.xlsx"
+totara_file = "course_completion_report_26Feb22.xlsx"
 status = get_totara_file(loc=totara_file, department=department, debug=debug)
 if not status:
     print("Exiting")
     sys.exit(-2)
+tot_time = datetime.datetime.fromtimestamp(os.path.getmtime("/mercury/data2/nraja/ppd/she/course_completion_report_26Feb22.xlsx")).strftime('%Y-%m-%d')
 totara_table = pd.read_excel(totara_file, engine="openpyxl")
-deptStaff.addTotaraRecords(totara_table, configuration.config, debug=debug)
+deptStaff.addTotaraRecords(totara_table, configuration.config, fileTime=tot_time, debug=debug)
 os.unlink(totara_file) # Clean up
 
 writeOutTrainings(deptStaff)
