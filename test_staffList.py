@@ -51,4 +51,4 @@ totara_table = pd.read_excel(totara_file, engine="openpyxl")
 deptStaff.addTotaraRecords(totara_table, configuration.config, fileTime=tot_time, debug=debug)
 os.unlink(totara_file) # Clean up
 
-writeOutTrainings(deptStaff)
+writeOutTrainings(deptStaff, configuration.config)

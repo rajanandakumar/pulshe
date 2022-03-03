@@ -3,17 +3,7 @@ from dateutil.relativedelta import relativedelta
 from dateutil.parser import parse
 import pandas as pd
 
-tURLs = {
-    "Induction Refresher test":"https://lmsweb.stfc.ac.uk/moodle/course/view.php?id=228",
-    "Fire test":"https://lmsweb.stfc.ac.uk/moodle/course/view.php?id=210",
-    "DSE training test":"https://lmsweb.stfc.ac.uk/moodle/mod/scorm/view.php?id=534",
-    "DSE self assessment  test":"https://uk.sheassure.net/stfc/Portal/Create/Portal/3f31848b-ae08-4dd5-970e-8efc4808362c#/information",
-    "Man Hand test":"https://lmsweb.stfc.ac.uk/moodle/course/view.php?id=168",
-    "Asbestos Essentials":"https://lmsweb.stfc.ac.uk/moodle/course/view.php?id=158",
-    "Electrical Safety Essentials":"https://lmsweb.stfc.ac.uk/moodle/course/view.php?id=181"
-}
-
-def writeOutTrainings(staff, debug=False):
+def writeOutTrainings(staff, conf, debug=False):
     outDir = "training/"
     she_sheet_date = staff.SHE_spreadsheet_date
     totara_sheet_date = staff.Totara_spreadsheet_date
@@ -22,37 +12,47 @@ def writeOutTrainings(staff, debug=False):
         # if uid != "Raja Nandakumar": continue
         f = open(fname, "w")
         writeOutHeader(f, uid, she_sheet_date, totara_sheet_date)
-        writeOutTraining(f, uid, staff.trainings_status[uid])
+        writeOutTraining(f, conf, uid, staff.trainings_status[uid])
         writeOutFooter(f)
         f.close()
 
-def writeOutTraining(hOut, uid, training_status):
+def writeOutTraining(hOut, conf, uid, training_status):
     hOut.write("""<hr align="center" width="70%">\n""")
     hOut.write("""<p><table><tr><th>Mandatory SHE training</th><th> Status </th><th> Date last completed</th><th> Training expiry date</th></tr>\n""")
-    for training, statList in training_status.items():
-        if training.startswith("TEST for ALL"): continue
-        status = statList[0]
-        s_date = statList[1]
-        source = statList[2]
-        if isinstance(s_date, type(pd.NaT)):
-            s_date = -1.0
 
-        xURL = "https://lmsweb.stfc.ac.uk/moodle/totara/dashboard/"
-        if training in tURLs.keys():
-            xURL = tURLs[training]
+    for tr in conf["she_trainings"]:
+        training = tr[0]
+        if training.startswith("TEST for ALL"): continue
+        xURL = tr[2]
         # What training it is
         hOut.write("""<tr><td> <a href="%s">%s</a> </td>""" %(xURL, training))
 
-        # The status of the training. Colour can dominate?
-        col = "#fffafa"
+        if training not in training_status.keys(): # Quickly write out no record and proceed
+            col = "#FF9F00"
+            col_date = "#99ee99"
+            status = "No Record"
+            hOut.write("""<td style="background-color:%s"> %s</td>""" %(col, status))
+            hOut.write("""<td style="background-color:%s"> %s</td>""" %(col_date, status))
+            hOut.write("""<td style="background-color:%s"> %s</td>""" %(col_date, " "))
+            hOut.write("""</tr>\n""" )
+            continue
+
+        # Training status
+        statList = training_status[training]
+        status = statList[0]
+        col = "#f6566b" # Default to red
         if status in ["In date", "OK", "Complete", "Complete via rpl"]:
-            col = "green"
+            col = "#52D017"
             status = "Up to date"
         elif status == "In progress": col = "yellow"
         hOut.write("""<td style="background-color:%s"> %s</td>""" %(col, status))
 
+        s_date = statList[1]
+        if isinstance(s_date, type(pd.NaT)):
+            s_date = -1.0
+
         # The date of the training and its manipulations
-        col_date = "#fffafa"
+        col_date = "#f6566b"
         dDue = "Unknown"
         dTrn = s_date
         col_date = "#115511"
