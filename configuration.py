@@ -14,7 +14,7 @@ config = {
         ("Fire test", (22,13)),
         ("DSE training test", (23, 14)),
         ("DSE self assessment  test", (24, 15)),
-        ("Man Hand test", (25, 16)),
+        ("Man Hand test", (25, 16, 17)),
         ("Asbestos Essentials", (27, 19)),
         ("Electrical Safety Essentials", (28, 20)),
         ("TEST for ALL Mandatory Training", (29,))],

@@ -78,6 +78,8 @@ class staffMember:
                     self.trainings_status[nName][tr[0]] = (srv[tr[1][0]], "Not needed", "SHE")
                 else:
                     self.updateTraining(nName, tr[0], srv[tr[1][0]], srv[tr[1][1]], "SHE")
+                    if tr[0].startswith("Man Hand"):
+                        self.updateTraining(nName, tr[0], srv[tr[1][0]], srv[tr[1][2]], "SHE")
         return 0
 
     def addTotaraRecords(self, totaraRecords, conf, fileTime, debug=False):
