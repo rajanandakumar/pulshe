@@ -52,10 +52,10 @@ class staffMember:
                     print(person["Title"], person["Forename"], person["Surname"],
                         "Was not added because email ID was bad:", person["Email"],)
 
-    def addSHERecords(self, sheRecords, conf, debug=False):
+    def addSHERecords(self, sheRecords, conf, fileTime, debug=False):
         # print(sheRecords) # Generic summary
         # SHE records are written by hand
-        self.SHE_spreadsheet_date = sheRecords.iat[1,22]
+        self.SHE_spreadsheet_date = fileTime 
         trs = conf["she_trainings"]
         for index, sR in sheRecords.iterrows():
             srv = sR.values
@@ -84,14 +84,19 @@ class staffMember:
 
     def addTotaraRecords(self, totaraRecords, conf, fileTime, debug=False):
         self.Totara_spreadsheet_date = fileTime
-        new_header = totaraRecords.iloc[3]
-        totaraRecords = totaraRecords[4:]
-        totaraRecords.columns = new_header
+        index = 0
+        # new_header = totaraRecords.iloc[index]
+        # totaraRecords = totaraRecords[index+1:]
+        # totaraRecords.columns = new_header
         kount = 0
         for index, tR in totaraRecords.iterrows():
             kount = kount + 1
             trd = tR.to_dict() # This works because apparently Totara records have a decent first row
-            if conf["department"] not in trd["User's Fullname"]: continue
+            # print(trd)
+
+            # Hopefully this takes care of ensuring that the person is in the department
+            if conf["department"] not in trd["User's Fullname"] and \
+               conf["department"] != trd["Department"]: continue
 
             nName = trd["User First Name"] + " " + trd["User Last Name"]
             if nName not in self.nList:
