@@ -1,20 +1,34 @@
-import os, time, datetime
+import os, time, datetime, pathlib
 from dateutil.relativedelta import relativedelta
 from dateutil.parser import parse
 import pandas as pd
 
 def writeOutTrainings(staff, conf, debug=False):
-    outDir = "training/"
+    outDir = "training"
     she_sheet_date = staff.SHE_spreadsheet_date
     totara_sheet_date = staff.Totara_spreadsheet_date
     for uid in staff.nList:
-        fname = outDir + uid + ".html"
+        outSubDir = uid
+        ff = "index.html" # Keep the file name simple
+        od = outDir + "/" + uid
+        fname = od + "/" + ff
         # if uid != "Raja Nandakumar": continue
+
+        pathlib.Path(od).mkdir(exist_ok=True) # Hope it does not crash?
+
         f = open(fname, "w")
-        writeOutHeader(f, uid, she_sheet_date, totara_sheet_date)
+        writeOutHeader(f, uid, totara_sheet_date)
         writeOutTraining(f, conf, uid, staff.trainings_status[uid])
         writeOutFooter(f)
         f.close()
+        writeOutHTA(od, staff.person[uid]["federalID"])
+
+def writeOutHTA(dOut, fID):
+    htaFile = dOut + "/.htaccess"
+    f = open(htaFile, "w")
+    f.write("Require all denied\n")
+    f.write("Require ldap-user %s\n" % fID)
+    f.close()
 
 def writeOutTraining(hOut, conf, uid, training_status):
     hOut.write("""<hr align="center" width="70%">\n""")
@@ -87,7 +101,7 @@ def writeOutTraining(hOut, conf, uid, training_status):
         hOut.write("""</tr>\n""" )
     hOut.write("</table>")
 
-def writeOutHeader(hOut, uid, she_date, totara_date):
+def writeOutHeader(hOut, uid, totara_date):
     hOut.write("""
 <HEAD>
     <meta http-equiv="refresh" content="1800">

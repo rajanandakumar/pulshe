@@ -29,6 +29,9 @@ cdrList = pd.read_excel(cdr_file, engine="xlrd", sheet_name="SearchResults")
 deptStaff.addDepartment(cdrList, debug=debug)
 os.unlink(cdr_file) # Clean up
 
+# print(deptStaff.eList)
+# sys.exit()
+
 # Get the SHE statuses
 she_file = "SHETrainingRecords.xlsm"
 status, she_time = get_she_file(loc=she_file, department=department, debug=debug)
