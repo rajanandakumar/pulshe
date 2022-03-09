@@ -21,7 +21,7 @@ def writeOutTrainings(staff, conf, debug=False):
         writeOutTraining(f, conf, uid, staff.trainings_status[uid])
         writeOutFooter(f)
         f.close()
-        writeOutHTA(od, staff.person[uid]["federalID"])
+        writeOutHTA(od, staff.person[uid]["Email"])
 
 def writeOutHTA(dOut, fID):
     htaFile = dOut + "/.htaccess"

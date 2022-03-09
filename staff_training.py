@@ -28,7 +28,7 @@ class staffMember:
         # The Unique Identifier of the person - eMail is not stored in the spreadsheets.
         # UID = eMail
         UID = nName
-        person["federalID"] = "rn37"
+        # person["federalID"] = "rn37"
         self.person[UID] = person
         self.trainings_status[UID] = {}
         self.nList.append(nName)
