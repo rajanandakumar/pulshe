@@ -8,26 +8,26 @@ def writeOutTrainings(staff, conf, debug=False):
     she_sheet_date = staff.SHE_spreadsheet_date
     totara_sheet_date = staff.Totara_spreadsheet_date
     for uid in staff.nList:
-        outSubDir = uid
         ff = "index.html" # Keep the file name simple
-        od = outDir + "/" + uid
-        fname = od + "/" + ff
+        outSubdir = outDir + "/" + staff.person[uid]["Email"] # Person identified by email
+        fname = outSubdir + "/" + ff
         # if uid != "Raja Nandakumar": continue
 
-        pathlib.Path(od).mkdir(exist_ok=True) # Hope it does not crash?
+        pathlib.Path(outSubdir).mkdir(exist_ok=True) # Hope it does not crash?
 
         f = open(fname, "w")
         writeOutHeader(f, uid, totara_sheet_date)
         writeOutTraining(f, conf, uid, staff.trainings_status[uid])
         writeOutFooter(f)
         f.close()
-        writeOutHTA(od, staff.person[uid]["Email"])
+        writeOutHTA(outSubdir, staff.person[uid]["Email"])
 
 def writeOutHTA(dOut, fID):
     htaFile = dOut + "/.htaccess"
     f = open(htaFile, "w")
     f.write("Require all denied\n")
     f.write("Require ldap-user %s\n" % fID)
+    f.write("DirectoryIndex index.html\n")
     f.close()
 
 def writeOutTraining(hOut, conf, uid, training_status):
