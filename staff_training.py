@@ -19,6 +19,8 @@ class staffMember:
         nName = person["Forename"] + " " + person["Surname"]
         if type(eMail) != type(""):
             return -1  # Critical error. Do not add this person.
+        eMail = eMail.lower() # It is a string
+        person["Email"] = person["Email"].lower()
         if len(eMail) < 5:
             return -2  # Critical error. Do not add this person.
         if eMail in self.eList:

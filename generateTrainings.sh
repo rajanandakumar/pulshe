@@ -19,6 +19,6 @@ fi
 
 echo "Finished setting up environment. Next : SHE processing"
 # Configuration is in file configuration.py
-python3 test_staffList.py configuration.py
+python3 staffList.py configuration.py
 
 deactivate

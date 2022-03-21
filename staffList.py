@@ -3,6 +3,7 @@ import pandas as pd
 import numpy as np
 import staff_training as st
 from writeOutData import writeOutTrainings
+from organogram import makeOrganogram
 from get_files import get_cdr_file, get_she_file, get_totara_file
 
 debug = False
@@ -29,6 +30,7 @@ cdrList = pd.read_excel(cdr_file, engine="xlrd", sheet_name="SearchResults")
 deptStaff.addDepartment(cdrList, debug=debug)
 os.unlink(cdr_file) # Clean up
 
+makeOrganogram(deptStaff)
 # print(deptStaff.eList)
 # sys.exit()
 
