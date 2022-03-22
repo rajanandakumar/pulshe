@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>SHE manager display page for {{my_string}}</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <style type="text/css">
+      .container {
+        max-width: 500px;
+        padding-top: 100px;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <p>My SHE information: <a href={{ url_for('onePerson', user=my_string) }}>{{my_string}}</a></p>
+      <p>Information for employees who report directly to me:</p>
+      <ul>
+        {% for n in my_employees %}
+        <li><a href={{ url_for('onePerson', user=n) }}>{{n}}</a></li>
+        {% endfor %}
+      </ul>
+    </div>
+  </body>
+</html>
