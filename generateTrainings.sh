@@ -14,7 +14,7 @@ else
     python3 -m venv $DIRECTORY
     source $DIRECTORY/bin/activate
     python3 -m pip install --upgrade pip
-    python3 -m pip install requests pandas openpyxl xlrd python-dateutil
+    python3 -m pip install requests pandas openpyxl xlrd python-dateutil ldap3
 fi
 
 echo "Finished setting up environment. Next : SHE processing"

@@ -15,6 +15,7 @@ def makeOrganogram(staff):
                 if eMail in staff.eList:
                     emList.append(eMail)
         if emList: organogram[staff.person[uid]["Email"]] = emList
+    organogram["debbie.loader@stfc.ac.uk"] = staff.eList
     with open('ppd_organogram.json', 'w') as file:
         file.write(json.dumps(organogram))
 
