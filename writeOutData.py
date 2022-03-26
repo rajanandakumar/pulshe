@@ -20,7 +20,7 @@ def writeOutTrainings(staff, conf, debug=False):
         writeOutTraining(f, conf, uid, staff.trainings_status[uid])
         writeOutFooter(f)
         f.close()
-        writeOutHTA(outSubdir, staff.person[uid]["Email"])
+        # writeOutHTA(outSubdir, staff.person[uid]["Email"])
 
 def writeOutHTA(dOut, fID):
     htaFile = dOut + "/.htaccess"
@@ -104,9 +104,8 @@ def writeOutTraining(hOut, conf, uid, training_status):
 def writeOutHeader(hOut, uid, totara_date):
     hOut.write("""
 <HEAD>
-    <meta http-equiv="refresh" content="1800">
     <TITLE>PPD SHE trainings record for %s</TITLE>
-    """ % uid)
+""" % uid)
     hOut.write("""
     <style type="text/css">
     table {
@@ -127,7 +126,7 @@ def writeOutHeader(hOut, uid, totara_date):
     tr:nth-child(even) {
         background-color: #D6EEEE;
     }
-</style>
+    </style>
 </HEAD>
 <BODY>
 """)
@@ -137,9 +136,10 @@ def writeOutHeader(hOut, uid, totara_date):
 
 def writeOutFooter(hOut):
     hOut.write("\n<p>\n")
-    hOut.write("""<p style="font-size:20px">Note : If you want to update any of your trainings, they are now online\
-        and available on the <a href="https://lmsweb.stfc.ac.uk/moodle/totara/dashboard/">\
-        Totara portal </a> </p>""")
+    hOut.write("""<p style="border: 1px solid lightgray; background: lightyellow; font-size:20px">
+The links above will each take you directly to the relevant online training. Make sure you are logged
+in first <a href="https://lmsweb.stfc.ac.uk/moodle/totara/dashboard/" target="_blank" rel="noopener noreferrer"> here in the totara portal </a>
+(opens in separate tab). </p>""")
     hOut.write("\n")
     hOut.write("""
   </body>

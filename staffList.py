@@ -11,6 +11,7 @@ debug = False
 
 # First initialise the staff trainings class
 cFile = sys.argv[1]
+print("Loading configuration file %s" % cFile)
 if cFile.endswith(".py"):
     cFile = cFile[:-3]
 configuration = __import__(cFile)
@@ -21,6 +22,7 @@ deptStaff = st.staffMember(department)
 # deptStaff = st.staffMember("PPD")
 
 # Get the list of members of the department.
+print("Contacting CDR for staff list information")
 cdr_file = "out_cdr.xls"
 status = get_cdr_file(loc=cdr_file, department=department, debug=debug)
 if not status:
@@ -30,11 +32,13 @@ cdrList = pd.read_excel(cdr_file, engine="xlrd", sheet_name="SearchResults")
 deptStaff.addDepartment(cdrList, debug=debug)
 os.unlink(cdr_file) # Clean up
 
+print("Making Department organogram")
 makeOrganogram(deptStaff)
 # print(deptStaff.eList)
 # sys.exit()
 
 # Get the SHE statuses
+print("Obtaining and processing SHE records")
 she_file = "SHETrainingRecords.xlsm"
 status, she_time = get_she_file(loc=she_file, department=department, debug=debug)
 if not status:
@@ -46,8 +50,7 @@ deptStaff.addSHERecords(she_table, configuration.config, fileTime=she_time, debu
 os.unlink(she_file) # Clean up
 
 # Get the totara statuses
-# totara_file = "course_completion_report-6_3Sep21.xlsx"
-# totara_file = "course_completion_report_26Feb22.xlsx"
+print("Obtaining and processing Totara records")
 totara_file = "course_completion_report.csv"
 status, tot_time = get_totara_file(loc=totara_file, department=department, debug=debug)
 if not status:
@@ -63,4 +66,5 @@ else:
 deptStaff.addTotaraRecords(totara_table, configuration.config, fileTime=tot_time, debug=debug)
 os.unlink(totara_file) # Clean up
 
+print("Writing out html output files")
 writeOutTrainings(deptStaff, configuration.config)
