@@ -1,6 +1,7 @@
 from flask import Flask, request
 from flask import render_template, url_for, send_from_directory
 import json
+import os
 # user email ID coming in from the login could be arbitrarily capitalised
 # Manager emails should all be lower case by design of the programme
 with open("/home/local/nraja/ppd/pulshe/ppd_organogram.json") as f:
@@ -22,9 +23,12 @@ def onePerson(user):
     if user == current_user or isMyEmployee(user):
         localDir = "/home/local/nraja/ppd/pulshe/training/"
         fileName = "index.html"
-        return send_from_directory(localDir + user, fileName)
+        if os.path.isfile(os.path.join(localDir, user, fileName)):
+            return send_from_directory(localDir + user, fileName)
+        else:
+            return "Wrong department? - 404 times sorry!", 404
     else:
-        return "Not authorised - sorry!"
+        return "Not authorised - 401 times sorry!", 401
 
 def isManager():
     current_user = request.authorization['username'].lower()
