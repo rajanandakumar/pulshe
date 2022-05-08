@@ -3,6 +3,7 @@ import pandas as pd
 import numpy as np
 import staff_training as st
 from writeOutData import writeOutTrainings
+from writeOutReport import writeOutReports
 from organogram import makeOrganogram
 from get_files import get_cdr_file, get_she_file, get_totara_file
 
@@ -68,3 +69,4 @@ os.unlink(totara_file) # Clean up
 
 print("Writing out html output files")
 writeOutTrainings(deptStaff, configuration.config)
+writeOutReports(deptStaff, configuration.config)

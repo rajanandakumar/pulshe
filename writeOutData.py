@@ -17,20 +17,11 @@ def writeOutTrainings(staff, conf, debug=False):
 
         f = open(fname, "w")
         writeOutHeader(f, uid, totara_sheet_date)
-        writeOutTraining(f, conf, uid, staff.trainings_status[uid])
+        writeOutTraining(f, conf, uid, staff.trainings_status[uid], staff.trainings_dueDate[uid])
         writeOutFooter(f)
         f.close()
-        # writeOutHTA(outSubdir, staff.person[uid]["Email"])
 
-def writeOutHTA(dOut, fID):
-    htaFile = dOut + "/.htaccess"
-    f = open(htaFile, "w")
-    f.write("Require all denied\n")
-    f.write("Require ldap-user %s\n" % fID)
-    f.write("DirectoryIndex index.html\n")
-    f.close()
-
-def writeOutTraining(hOut, conf, uid, training_status):
+def writeOutTraining(hOut, conf, uid, training_status, tr_dueDate):
     hOut.write("""<hr align="center" width="70%">\n""")
     hOut.write("""<p><table><tr><th>Mandatory SHE training</th><th> Status </th><th> Date last completed</th><th> Training expiry date</th></tr>\n""")
 
@@ -43,12 +34,13 @@ def writeOutTraining(hOut, conf, uid, training_status):
 
         if training not in training_status.keys(): # Quickly write out no record and proceed
             col = "#FF9F00"
-            col_date = "#99ee99"
+            col_date = "#FF9F00" # "#99ee99"
             status = "No Record"
             hOut.write("""<td style="background-color:%s"> %s</td>""" %(col, status))
             hOut.write("""<td style="background-color:%s"> %s</td>""" %(col_date, status))
             hOut.write("""<td style="background-color:%s"> %s</td>""" %(col_date, " "))
             hOut.write("""</tr>\n""" )
+            tr_dueDate[training] = ["No Record", col_date, "Due"]
             continue
 
         # Training status
@@ -66,7 +58,6 @@ def writeOutTraining(hOut, conf, uid, training_status):
             s_date = -1.0
 
         # The date of the training and its manipulations
-        col_date = "#f6566b"
         dDue = "Unknown"
         dTrn = s_date
         col_date = "#115511"
@@ -93,10 +84,13 @@ def writeOutTraining(hOut, conf, uid, training_status):
         if training.startswith("Asbestos") or training.startswith("Electrical"):
             if str(s_date)[:2] == "20": # Has been done this century
                 hOut.write("""<td style="background-color:%s"> %s</td>""" %(col_date, "Does not expire"))
+                tr_dueDate[training] = [str(s_date)[:10], col_date, "OK"]
             else:
                 hOut.write("""<td style="background-color:%s"> %s</td>""" %("#FF7777", "Needed"))
+                tr_dueDate[training] = [str(s_date)[:10], "#FF7777", "Due"]
         else:
             hOut.write("""<td style="background-color:%s"> %s</td>""" %(col_date, str(dDue)[:10]))
+            tr_dueDate[training] = [str(dDue)[:10], col_date, "...."]
 
         hOut.write("""</tr>\n""" )
     hOut.write("</table>")

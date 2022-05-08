@@ -7,6 +7,7 @@ class staffMember:
         self.department = department
         self.person = {} # The identifying details of the person
         self.trainings_status = {} # The trainings associated to person
+        self.trainings_dueDate = {} # The trainings associated to person
         self.eList = []  # List of all email addresses (sanity check for duplication)
 
         # List of all "names" = Forename Surname (Totara does not return initials?)
@@ -32,7 +33,9 @@ class staffMember:
         UID = nName
         # person["federalID"] = "rn37"
         self.person[UID] = person
+        self.person[UID]["Location"] = "Unknown"
         self.trainings_status[UID] = {}
+        self.trainings_dueDate[UID] = {}
         self.nList.append(nName)
         self.nStaff = self.nStaff + 1
         return 0
@@ -101,11 +104,20 @@ class staffMember:
             if conf["department"] not in trd["User's Fullname"] and \
                conf["department"] != trd["Department"]: continue
 
+
             nName = trd["User First Name"] + " " + trd["User Last Name"]
             if nName not in self.nList:
                 if debug:
                     print("addSHERecords - Unidentified name :", nName)
                 continue
+
+            if self.person[nName]["Location"] == "Unknown":
+                ufn = trd["User's Fullname"]
+                loc = "Unknown"
+                if "(" in ufn:
+                    ulo = ufn[ufn.index("(")+1:-1]
+                    loc = ulo.split(",")[1]
+                self.person[nName]["Location"] = loc
 
             # Some clean up of the course names
             course = trd['Course Name']
