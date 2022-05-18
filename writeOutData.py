@@ -17,13 +17,29 @@ def writeOutTrainings(staff, conf, debug=False):
 
         f = open(fname, "w")
         writeOutHeader(f, uid, totara_sheet_date)
-        writeOutTraining(f, conf, uid, staff.trainings_status[uid], staff.trainings_dueDate[uid])
+        nOKTrs = writeOutTraining(f, conf, uid, staff.trainings_status[uid], staff.trainings_dueDate[uid])
         writeOutFooter(f)
         f.close()
+        writeOKay(outSubdir)
+        if nOKTrs == len(conf["she_trainings"]) - 1:
+            writeOKay(outSubdir, okay=True)
+        # print(uid, nOKTrs, len(conf["she_trainings"]))
+
+def writeOKay(path, okay=False):
+    fnam = path + "/ok"
+    if not okay:
+        if os.path.exists(fnam):
+            os.unlink(fnam)
+    else:
+        open(fnam,'a').close() # Just need an empty file
+
+
 
 def writeOutTraining(hOut, conf, uid, training_status, tr_dueDate):
     hOut.write("""<hr align="center" width="70%">\n""")
     hOut.write("""<p><table><tr><th>Mandatory SHE training</th><th> Status </th><th> Date last completed</th><th> Training expiry date</th></tr>\n""")
+
+    nOKTrainings = 0
 
     for tr in conf["she_trainings"]:
         training = tr[0]
@@ -92,8 +108,12 @@ def writeOutTraining(hOut, conf, uid, training_status, tr_dueDate):
             hOut.write("""<td style="background-color:%s"> %s</td>""" %(col_date, str(dDue)[:10]))
             tr_dueDate[training] = [str(dDue)[:10], col_date, "...."]
 
+        if tr_dueDate[training][1] == "#99ee99":
+            nOKTrainings = nOKTrainings + 1 # The SHE spreadsheet is out of date. So cannot rely on it.
+
         hOut.write("""</tr>\n""" )
     hOut.write("</table>")
+    return nOKTrainings
 
 def writeOutHeader(hOut, uid, totara_date):
     hOut.write("""

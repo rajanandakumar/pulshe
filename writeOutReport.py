@@ -30,7 +30,7 @@ def writeOutReports(staff, conf, debug=False):
             f.write("""<td style="background-color:%s"> %s</td>""" %(staff.trainings_dueDate[uid][training][1],
                 staff.trainings_dueDate[uid][training][0]))
             if staff.trainings_dueDate[uid][training][1] == "#99ee99":
-               nUpToDate[training] = nUpToDate[training] + 1
+                nUpToDate[training] = nUpToDate[training] + 1
         # writeOutTraining(f, conf, uid, staff.trainings_status[uid])
         f.write("</tr>\n")
 
