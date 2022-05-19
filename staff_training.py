@@ -147,6 +147,9 @@ class staffMember:
             elif course == "Electrical Safety Essentials":
                 trg = "Electrical Safety Essentials"
                 okay = True
+            elif course == "STFC Health and Safety Arrangements BiteSize":
+                trg = "STFC H&S BiteSize"
+                okay = True
             if okay:
                 self.updateTraining(nName, trg, trd['Completion Status'], trd['The completion date'], "Totara")
         return 0
