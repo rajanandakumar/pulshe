@@ -17,9 +17,9 @@ def writeOutReports(staff, conf, debug=False):
         nUpToDate[tr[0]] = 0
 
     for uid in staff.nList:
-        if staff.person[uid]["Location"] != "RAL" : continue
-        if staff.person[uid]["Building"] == "Remote working" : continue
-        if type(staff.person[uid]["Band"]) != type("abc") : continue
+        if staff.person[uid]["Location"] != "RAL filtered" : continue
+        # if staff.person[uid]["Building"] == "Remote working" : continue
+        # if type(staff.person[uid]["Band"]) != type("abc") : continue
 
         f.write("""<tr><td style="background-color:white"> %s</td>""" % uid)
         nTot = nTot + 1
@@ -42,11 +42,19 @@ def writeOutReports(staff, conf, debug=False):
     totara_sheet_date = staff.Totara_spreadsheet_date
     f = open(fileName, "w")
     writeOutReportHeader(f, conf, totara_sheet_date)
-    f.write("""<tr><td style="background-color:white"> %s</td>""" % nTot)
+    # The basic totals
+    f.write("""<tr><td> %s</td>""" % nTot)
     for tr in conf["she_trainings"]:
         training = tr[0]
         if training.startswith("TEST for ALL"): continue
         f.write("""<td> %s</td>""" % nUpToDate[training])
+    # The fractions
+    # f.write("""\n<tr><td style="background-color:white"> %</td>""")
+    f.write("""\n<tr><td> %</td>""")
+    for tr in conf["she_trainings"]:
+        training = tr[0]
+        if training.startswith("TEST for ALL"): continue
+        f.write("""<td style="background-color:light-green"> %.2f</td>""" % (100.0*nUpToDate[training]/nTot))
     writeOutReportFooter(f)
     f.close()
 
@@ -73,6 +81,9 @@ def writeOutReportHeader(hOut, conf, totara_date):
         text-align: center;
         border: 1px solid black;
     }
+    tr {
+        background-color: #EEEED6;
+    }
     tr:nth-child(even) {
         background-color: #D6EEEE;
     }
@@ -81,7 +92,7 @@ def writeOutReportHeader(hOut, conf, totara_date):
 <BODY>
 """)
     hOut.write("""<p style="font-size:20px">Report preparation date: %s </p>\n"""%str(totara_date)[:10])
-    hOut.write("""<p><table><tr><th>Name</th>""")
+    hOut.write("""<p><table><tr><th style="background-color:white">Name</th>""")
     for tr in conf["she_trainings"]:
         training = tr[0]
         if training.startswith("TEST for ALL"): continue

@@ -18,6 +18,16 @@ class staffMember:
     def addPerson(self, person):
         eMail = person["Email"]
         nName = person["Forename"] + " " + person["Surname"]
+        # Specific exception
+        if person["Surname"] == "Buttinger":
+            nName = "Will Buttinger"
+        if person["Surname"] == "Rao Gopalam":
+            nName = "Sandeep Gopalam"
+        if person["Surname"] == "Richards" and person["Forename"] == "Kate":
+            nName = "Katherine (Kate) Richards"
+        if person["Surname"] == "Whalen" and person["Forename"] == "Kate":
+            nName = "Kathleen (Kate) Whalen"
+        #
         if type(eMail) != type(""):
             return -1  # Critical error. Do not add this person.
         eMail = eMail.lower() # It is a string
@@ -57,26 +67,43 @@ class staffMember:
                 elif status != 0:
                     print(person["Title"], person["Forename"], person["Surname"],
                         "Was not added because email ID was bad:", person["Email"],)
+        # print(self.nList)
 
     def addSHERecords(self, sheRecords, conf, fileTime, debug=False):
         # print(sheRecords) # Generic summary
         # SHE records are written by hand
         self.SHE_spreadsheet_date = fileTime 
         trs = conf["she_trainings"]
+        kount = 0
         for index, sR in sheRecords.iterrows():
+            kount = kount + 1
             srv = sR.values
+            # for iii in range(len(srv)):
+            #     print(iii,srv[iii])
+            # if kount >= 5 :
+            #     import sys
+            #     sys.exit()
             if len(srv) < conf["she_numColumns"] : continue #Record not complete
 
             # Select only "live" and "staff / fixed term" from the configured department
             if srv[conf["she_department"]] != conf["department"]: continue
             if srv[conf["she_status"]] != "Live": continue
-            if srv[conf["she_type"]] not in {"Staff", "Fixed Term"} : continue
+            # if srv[conf["she_type"]] not in {"Staff", "Fixed Term", "Agency"} : continue  # Bug?
+            if srv[conf["she_type"]] not in ["Staff", "Fixed Term", "Agency"] : continue
 
             nName = srv[conf["she_forename"]] + " " + srv[conf["she_lastname"]] # UID : Same algorithm as in line 14/15, 33/34 above
-            if nName not in self.nList:
-                if debug:
-                    print("addSHERecords - Unidentified name :", nName)
+            if nName in ["Josephine Jones", "Asher Kaboth"]:
                 continue
+            if nName == "Atanu Modal":
+                nName = "Atanu Modak"
+            if nName == "Sandeep Rao Gopalam":
+                nName = "Sandeep Gopalam"
+            self.person[nName]["Location"] = "RAL filtered"
+            if nName not in self.nList:
+                if nName not in self.nList:
+                    if debug:
+                        print("addSHERecords - Unidentified name :", nName)
+                    continue
 
             # Add in the training records
             for tr in trs:
@@ -101,11 +128,21 @@ class staffMember:
             # print(trd)
 
             # Hopefully this takes care of ensuring that the person is in the department
+            if trd["Active/Deleted"] == "Deleted" : continue
             if conf["department"] not in trd["User's Fullname"] and \
                conf["department"] != trd["Department"]: continue
 
-
             nName = trd["User First Name"] + " " + trd["User Last Name"]
+            if nName in ["Alfons Weber"]: # Has left for Germany
+                continue
+            if nName == "Kate Richards":
+                nName = "Katherine (Kate) Richards"
+            if nName == "Sandeep Rao Gopalam":
+                nName = "Sandeep Gopalam"
+            if nName == "William Buttinger":
+                nName = "Will Buttinger"
+            if nName == "Kate Whalen":
+                nName = "Kathleen (Kate) Whalen"
             if nName not in self.nList:
                 if debug:
                     print("addSHERecords - Unidentified name :", nName)
