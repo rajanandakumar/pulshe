@@ -98,6 +98,8 @@ class staffMember:
                 nName = "Atanu Modak"
             if nName == "Sandeep Rao Gopalam":
                 nName = "Sandeep Gopalam"
+            if nName == "Nicholas Jones":
+                nName = "Nicholas Cleverly-Jones"
             self.person[nName]["Location"] = "RAL filtered"
             if nName not in self.nList:
                 if nName not in self.nList:
