@@ -101,8 +101,7 @@ class staffMember:
             self.person[nName]["Location"] = "RAL filtered"
             if nName not in self.nList:
                 if nName not in self.nList:
-                    if debug:
-                        print("addSHERecords - Unidentified name :", nName)
+                    print("addSHERecords - Unidentified name :", nName)
                     continue
 
             # Add in the training records
@@ -144,8 +143,7 @@ class staffMember:
             if nName == "Kate Whalen":
                 nName = "Kathleen (Kate) Whalen"
             if nName not in self.nList:
-                if debug:
-                    print("addSHERecords - Unidentified name :", nName)
+                print("addSHERecords - Unidentified name :", nName)
                 continue
 
             if self.person[nName]["Location"] == "Unknown":
