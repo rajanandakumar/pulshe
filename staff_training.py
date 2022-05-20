@@ -144,6 +144,8 @@ class staffMember:
                 nName = "Will Buttinger"
             if nName == "Kate Whalen":
                 nName = "Kathleen (Kate) Whalen"
+            if nName == "Nicholas Jones":
+                nName = "Nicholas Cleverly-Jones"
             if nName not in self.nList:
                 print("addSHERecords - Unidentified name :", nName)
                 continue
