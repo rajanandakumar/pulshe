@@ -97,7 +97,7 @@ def writeOutTraining(hOut, conf, uid, training_status, tr_dueDate):
             hOut.write("""<td style="background-color:%s"> %s</td>""" %(col_date, str(s_date)[:10]))
 
         #  Date training is due
-        if training.startswith("Asbestos") or training.startswith("Electrical"):
+        if training.startswith("Asbestos") or training.startswith("Electrical") or "BiteSize" in training:
             if str(s_date)[:2] == "20": # Has been done this century
                 hOut.write("""<td style="background-color:%s"> %s</td>""" %(col_date, "Does not expire"))
                 tr_dueDate[training] = [str(s_date)[:10], col_date, "OK"]
