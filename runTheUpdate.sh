@@ -7,10 +7,7 @@ locTrainDir="training"
 
 cd $pulsheDir"/pulshe"
 end_date=`date -I`
-# today=`date -I`
-today=`date '+%C%y%m%d' -d "$end_date-7 days"
-echo $today
-exit 1
+today=`date '+%C%y%m%d' -d "$end_date-7 days"`
 
 echo "Tidy up training directory locally"
 mv $locTrainDir $locTrainDir"-"$today
