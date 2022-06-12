@@ -6,7 +6,11 @@ orgGram="ppd_organogram.json"
 locTrainDir="training"
 
 cd $pulsheDir"/pulshe"
-today=`date -I`
+end_date=`date -I`
+# today=`date -I`
+today=`date '+%C%y%m%d' -d "$end_date-7 days"
+echo $today
+exit 1
 
 echo "Tidy up training directory locally"
 mv $locTrainDir $locTrainDir"-"$today
