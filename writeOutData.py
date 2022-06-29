@@ -87,7 +87,8 @@ def writeOutTraining(hOut, conf, uid, training_status, tr_dueDate):
             col_date = "#99ee99"
             dDue = dTrn + relativedelta(years=+5)
             if  dDue < dNow:
-                col_date = "#ee9999"
+                if not (training.startswith("Asbestos") or training.startswith("Electrical") or "BiteSize" in training):
+                    col_date = "#ee9999"
         if s_date == "0/0/0": # Training not done / recorded
             col_date = "#ffa500"
 

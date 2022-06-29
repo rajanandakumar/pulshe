@@ -93,15 +93,18 @@ class staffMember:
 
             nName = srv[conf["she_forename"]] + " " + srv[conf["she_lastname"]] # UID : Same algorithm as in line 14/15, 33/34 above
             if nName in ["Josephine Jones", "Asher Kaboth"]:
+                print("Still encountering %s ..." %nName)
                 continue
             if nName == "Atanu Modal":
                 nName = "Atanu Modak"
+                print("Still encountering Atanu Modal ...")
             if nName == "Sandeep Rao Gopalam":
                 nName = "Sandeep Gopalam"
             if nName == "Nicholas Jones":
                 nName = "Nicholas Cleverly-Jones"
             if nName == "Calum Cox":
                 nName = "Callum Cox"
+                print("Still encountering Calum Cox ...")
             self.person[nName]["Location"] = "RAL filtered"
             if nName not in self.nList:
                 if nName not in self.nList:
