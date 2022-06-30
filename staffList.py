@@ -38,20 +38,25 @@ makeOrganogram(deptStaff)
 # print(deptStaff.eList)
 # sys.exit()
 
+print("\nTime of current run : ", str(datetime.datetime.now())[:19])
+
 # Get the SHE statuses
-print("Obtaining and processing SHE records")
-she_file = "SHETrainingRecords.xlsm"
+print("\nObtaining and processing SHE records")
+# she_file = "SHETrainingRecords.xlsm"
+she_file = "SHETrainingRecords-31May2022.xlsm"
+print("SHE spreadsheet used : ", she_file)
 status, she_time = get_she_file(loc=she_file, department=department, debug=debug)
 if not status:
     print("Exiting")
     sys.exit(-2)
 # she_table = pd.read_excel(she_file, engine="openpyxl", sheet_name="Summary")
 she_table = pd.read_excel(she_file, engine="openpyxl", sheet_name="Master Data")
+# she_table = pd.read_excel(she_file, engine="openpyxl", sheet_name="Sheet1")
 deptStaff.addSHERecords(she_table, configuration.config, fileTime=she_time, debug=debug)
 os.unlink(she_file) # Clean up
 
 # Get the totara statuses
-print("Obtaining and processing Totara records")
+print("\nObtaining and processing Totara records")
 totara_file = "course_completion_report.csv"
 status, tot_time = get_totara_file(loc=totara_file, department=department, debug=debug)
 if not status:
@@ -64,9 +69,10 @@ if totara_file.endswith("csv"):
     # print(totara_table.info())
 else:
     totara_table = pd.read_excel(totara_file, engine="openpyxl")
+print("Totara table obtained on ", tot_time)
 deptStaff.addTotaraRecords(totara_table, configuration.config, fileTime=tot_time, debug=debug)
 os.unlink(totara_file) # Clean up
 
-print("Writing out html output files")
+print("\nWriting out html output files")
 writeOutTrainings(deptStaff, configuration.config)
 writeOutReports(deptStaff, configuration.config)
