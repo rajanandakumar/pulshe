@@ -89,10 +89,12 @@ class staffMember:
             if srv[conf["she_department"]] != conf["department"]: continue
             if srv[conf["she_status"]] != "Live": continue
             # if srv[conf["she_type"]] not in {"Staff", "Fixed Term", "Agency"} : continue  # Bug?
-            if srv[conf["she_type"]] not in ["Staff", "Fixed Term", "Agency"] : continue
+            # if srv[conf["she_type"]] not in ["Staff", "Fixed Term", "Agency"] : continue
+            if srv[conf["she_type"]].strip().lower() not in ["staff", "fixed term", "agency"] : continue
 
             nName = srv[conf["she_forename"]] + " " + srv[conf["she_lastname"]] # UID : Same algorithm as in line 14/15, 33/34 above
-            if nName in ["Josephine Jones", "Asher Kaboth"]:
+            # print(nName)
+            if nName in ["Josephine Jones", "Asher Kaboth", "Maria Maxouti"]:
                 print("Still encountering %s ..." %nName)
                 continue
             if nName == "Atanu Modal":
