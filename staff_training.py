@@ -94,7 +94,7 @@ class staffMember:
 
             nName = srv[conf["she_forename"]] + " " + srv[conf["she_lastname"]] # UID : Same algorithm as in line 14/15, 33/34 above
             # print(nName)
-            if nName in ["Josephine Jones", "Asher Kaboth", "Maria Maxouti"]:
+            if nName in conf["she_leftDept"]: # Has left for Germany
                 print("Still encountering %s ..." %nName)
                 continue
             if nName == "Atanu Modal":
@@ -141,7 +141,7 @@ class staffMember:
                conf["department"] != trd["Department"]: continue
 
             nName = trd["User First Name"] + " " + trd["User Last Name"]
-            if nName in ["Alfons Weber"]: # Has left for Germany
+            if nName in conf["totara_leftDept"]: # Has left for Germany
                 continue
             if nName == "Kate Richards":
                 nName = "Katherine (Kate) Richards"
@@ -154,7 +154,7 @@ class staffMember:
             if nName == "Nicholas Jones":
                 nName = "Nicholas Cleverly-Jones"
             if nName not in self.nList:
-                print("addSHERecords - Unidentified name :", nName)
+                print("addTotaraRecords - Unidentified name :", nName)
                 continue
 
             if self.person[nName]["Location"] == "Unknown":

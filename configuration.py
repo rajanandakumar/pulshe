@@ -22,6 +22,14 @@ config = {
     ],
     "AllTraining" : "TEST for ALL Mandatory Training", # The test for all mandatory training
 
-    # Totara configuration
+    # People left but still in SHE spreadsheet
+    "she_leftDept" : [
+        "Josephine Jones", "Asher Kaboth", "Maria Maxouti", # Project students left in 2021
+    ],
+
+    # People left but still in Totara spreadsheet
+    "totara_leftDept" : [
+        "Alfons Weber", # Has left for Germany in 2021
+    ],
 
 }
