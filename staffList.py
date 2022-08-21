@@ -31,6 +31,7 @@ if not status:
     sys.exit(-2)
 cdrList = pd.read_excel(cdr_file, engine="xlrd", sheet_name="SearchResults")
 deptStaff.addDepartment(cdrList, debug=debug)
+
 os.unlink(cdr_file) # Clean up
 
 print("Making Department organogram")

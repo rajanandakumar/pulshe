@@ -26,7 +26,7 @@ def get_she_file(loc="", department="PPD", debug=False):
     if debug:
         print("Getting the SHE trainings as file name ", loc)
     # Holding code for obtaining the spreadsheet from SHE in "some way". Probably dropped in place by Mauritz?
-    path = "/mercury/data2/nraja/ppd/she/"
+    path = "/data/pulshe/she/"
     shutil.copy2( path + loc, ".")
     she_time = datetime.datetime.fromtimestamp(os.path.getmtime(path + loc)).strftime('%Y-%m-%d')
     return (True, she_time)
@@ -36,7 +36,7 @@ def get_totara_file(loc="", department="PPD", debug=False):
         print("Getting the Totara trainings as file name ", loc)
     # Holding function for obtaining the spreadsheet from Totara.
     # Apparently using sftp in some manner - to be understood over the meetings with DI.
-    path = "/mercury/data2/nraja/ppd/she/"
+    path = "/data/pulshe/she/"
     shutil.copy2( path + loc, ".")
     tot_time = datetime.datetime.fromtimestamp(os.path.getmtime(path + loc)).strftime('%Y-%m-%d')
     return (True, tot_time)

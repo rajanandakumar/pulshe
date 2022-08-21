@@ -93,25 +93,17 @@ class staffMember:
             if srv[conf["she_type"]].strip().lower() not in ["staff", "fixed term", "agency"] : continue
 
             nName = srv[conf["she_forename"]] + " " + srv[conf["she_lastname"]] # UID : Same algorithm as in line 14/15, 33/34 above
-            # print(nName)
-            if nName in conf["she_leftDept"]: # Has left for Germany
-                print("Still encountering %s ..." %nName)
+            if nName in conf["she_leftDept"]:
+                print("Still encountering %s ... (left?)" %nName)
                 continue
-            if nName == "Atanu Modal":
-                nName = "Atanu Modak"
-                print("Still encountering Atanu Modal ...")
-            if nName == "Sandeep Rao Gopalam":
-                nName = "Sandeep Gopalam"
-            if nName == "Nicholas Jones":
-                nName = "Nicholas Cleverly-Jones"
-            if nName == "Calum Cox":
-                nName = "Callum Cox"
-                print("Still encountering Calum Cox ...")
-            self.person[nName]["Location"] = "RAL filtered"
+            if nName in conf["she_nameMismatch"].keys():
+                cName = conf["she_nameMismatch"][nName]
+                print(f"Still encountering wrong name - {nName}. Should be {cName}")
+                nName = cName
             if nName not in self.nList:
-                if nName not in self.nList:
-                    print("addSHERecords - Unidentified name :", nName)
-                    continue
+                print("addSHERecords - Unidentified name (left?) :", nName)
+                continue
+            self.person[nName]["Location"] = "RAL filtered"
 
             # Add in the training records
             for tr in trs:

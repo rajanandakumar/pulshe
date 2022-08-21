@@ -25,7 +25,15 @@ config = {
     # People left but still in SHE spreadsheet
     "she_leftDept" : [
         "Josephine Jones", "Asher Kaboth", "Maria Maxouti", # Project students left in 2021
+        "Divyatharsshni Sekar", # yini  left in July 2022
     ],
+
+    "she_nameMismatch" : {
+        "Atanu Modal": "Atanu Modak",
+        "Sandeep Rao Gopalam": "Sandeep Gopalam",
+        "Nicholas Jones": "Nicholas Cleverly-Jones",
+        "Calum Cox": "Callum Cox",
+    },
 
     # People left but still in Totara spreadsheet
     "totara_leftDept" : [

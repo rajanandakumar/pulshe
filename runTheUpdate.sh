@@ -19,8 +19,8 @@ echo "downloaded and properly located already"
 
 echo "Moving the training directory into final location"
 trainDir=$pulsheDir$locTrainDir"/ppd"
-sudo mv $trainDir $trainDir"-"$today
-sudo cp -Rp $locTrainDir $trainDir
+mv $trainDir $trainDir"-"$today
+cp -Rp $locTrainDir $trainDir
 
 echo "Copy the organogram into prod area"
-sudo cp $orgGram $pulsheDir"/prod/ppd"
+cp $orgGram $pulsheDir"/prod/ppd"
