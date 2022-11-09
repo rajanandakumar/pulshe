@@ -24,7 +24,7 @@ config = {
 
     # People left but still in SHE spreadsheet
     "she_leftDept" : [
-        "Josephine Jones", "Asher Kaboth", "Maria Maxouti", # Project students left in 2021
+        "Josephine Jones", "Asher Kaboth", # To be removed in 2021
         "Divyatharsshni Sekar", # yini  left in July 2022
     ],
 

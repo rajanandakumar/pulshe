@@ -146,7 +146,7 @@ class staffMember:
             if nName == "Nicholas Jones":
                 nName = "Nicholas Cleverly-Jones"
             if nName not in self.nList:
-                print("addTotaraRecords - Unidentified name :", nName)
+                print("addTotaraRecords - Unidentified (missing in CDR?) :", nName)
                 continue
 
             if self.person[nName]["Location"] == "Unknown":
@@ -191,6 +191,16 @@ class staffMember:
             if okay:
                 self.updateTraining(nName, trg, trd['Completion Status'], trd['The completion date'], "Totara")
         return 0
+
+    def printTotaraUpates(self, conf, debug=False):
+        for uid in self.nList:
+            if self.person[uid]["Location"] != "RAL filtered" : continue
+            for tr in conf["she_trainings"]:
+                training = tr[0]
+                if training not in self.trainings_status[uid].keys(): continue
+                if training.startswith("TEST for ALL"): continue
+                if self.trainings_status[uid][training][2] == "Totara":
+                    print(f"{uid:20s} {training:25s} {str(self.trainings_status[uid][training][1])[:10]}")
 
     def updateTraining(self, uid, training, stat, date, info):
         if training not in self.trainings_status[uid]: # new record

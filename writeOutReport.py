@@ -33,8 +33,6 @@ def writeOutReports(staff, conf, debug=False):
                 staff.trainings_dueDate[uid][training][0]))
             if staff.trainings_dueDate[uid][training][1] == "#99ee99":
                 nUpToDate[training] = nUpToDate[training] + 1
-            # if training.startswith("Induction"):
-            # if uid == "Sally Dixon":
             if staff.trainings_status[uid][training][2] == "Totara":
                print(f"{uid:20s} {training:25s} {str(staff.trainings_status[uid][training][1])[:10]}")
             # print(staff.trainings_status[uid][training][2])
