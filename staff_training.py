@@ -1,17 +1,18 @@
 import pandas as pd
 from dateutil.parser import parse
 
+
 class staffMember:
     def __init__(self, department="PPD"):
         self.nStaff = 0
         self.department = department
-        self.person = {} # The identifying details of the person
-        self.trainings_status = {} # The trainings associated to person
-        self.trainings_dueDate = {} # The trainings associated to person
+        self.person = {}  # The identifying details of the person
+        self.trainings_status = {}  # The trainings associated to person
+        self.trainings_dueDate = {}  # The trainings associated to person
         self.eList = []  # List of all email addresses (sanity check for duplication)
 
         # List of all "names" = Forename Surname (Totara does not return initials?)
-        self.nList = [] # This is the list of all the Unique IDs (UID) as defined in addPerson
+        self.nList = []  # This is the list of all the Unique IDs (UID) as defined in addPerson
         self.SHE_spreadsheet_date = ""
         self.Totara_spreadsheet_date = ""
 
@@ -30,7 +31,7 @@ class staffMember:
         #
         if type(eMail) != type(""):
             return -1  # Critical error. Do not add this person.
-        eMail = eMail.lower() # It is a string
+        eMail = eMail.lower()  # It is a string
         person["Email"] = person["Email"].lower()
         if len(eMail) < 5:
             return -2  # Critical error. Do not add this person.
@@ -53,8 +54,14 @@ class staffMember:
     def myPrint(self):
         print("Number of staff : ", self.nStaff)
         for i in range(self.nStaff):
-            print(i, self.person[i]["Title"], self.person[i]["Forename"], self.person[i]["Initials"],
-                self.person[i]["Surname"], self.person[i]["Email"])
+            print(
+                i,
+                self.person[i]["Title"],
+                self.person[i]["Forename"],
+                self.person[i]["Initials"],
+                self.person[i]["Surname"],
+                self.person[i]["Email"],
+            )
 
     def addDepartment(self, cdrList, debug=False):
         for index, bx in cdrList.iterrows():
@@ -65,14 +72,19 @@ class staffMember:
                     continue
                     # print("Duplicate emaild ID - person not added:", person["Email"])
                 elif status != 0:
-                    print(person["Title"], person["Forename"], person["Surname"],
-                        "Was not added because email ID was bad:", person["Email"],)
+                    print(
+                        person["Title"],
+                        person["Forename"],
+                        person["Surname"],
+                        "Was not added because email ID was bad:",
+                        person["Email"],
+                    )
         # print(self.nList)
 
     def addSHERecords(self, sheRecords, conf, fileTime, debug=False):
         # print(sheRecords) # Generic summary
         # SHE records are written by hand
-        self.SHE_spreadsheet_date = fileTime 
+        self.SHE_spreadsheet_date = fileTime
         trs = conf["she_trainings"]
         kount = 0
         for index, sR in sheRecords.iterrows():
@@ -83,32 +95,45 @@ class staffMember:
             # if kount >= 5 :
             #     import sys
             #     sys.exit()
-            if len(srv) < conf["she_numColumns"] : continue #Record not complete
+            if len(srv) < conf["she_numColumns"]:
+                continue  # Record not complete
 
             # Select only "live" and "staff / fixed term" from the configured department
-            if srv[conf["she_department"]] != conf["department"]: continue
-            if srv[conf["she_status"]] != "Live": continue
+            if srv[conf["she_department"]] != conf["department"]:
+                continue
+            if srv[conf["she_status"]] != "Live":
+                continue
             # if srv[conf["she_type"]] not in {"Staff", "Fixed Term", "Agency"} : continue  # Bug?
             # if srv[conf["she_type"]] not in ["Staff", "Fixed Term", "Agency"] : continue
-            if srv[conf["she_type"]].strip().lower() not in ["staff", "fixed term", "agency"] : continue
+            if srv[conf["she_type"]].strip().lower() not in [
+                "staff",
+                "fixed term",
+                "agency",
+            ]:
+                continue
 
-            nName = srv[conf["she_forename"]] + " " + srv[conf["she_lastname"]] # UID : Same algorithm as in line 14/15, 33/34 above
+            # UID : Same algorithm as in line 14/15, 33/34 above
+            nName = srv[conf["she_forename"]].strip() + " " + srv[conf["she_lastname"]].strip()
             if nName in conf["she_leftDept"]:
-                print("Still encountering %s ... (left?)" %nName)
+                print(f"Still encountering {nName} ... (left?)")
                 continue
             if nName in conf["she_nameMismatch"].keys():
                 cName = conf["she_nameMismatch"][nName]
                 print(f"Still encountering wrong name - {nName}. Should be {cName}")
                 nName = cName
             if nName not in self.nList:
-                print("addSHERecords - Unidentified name (left?) :", nName)
+                print(f"addSHERecords - Unidentified name (left?) :{nName}")
                 continue
             self.person[nName]["Location"] = "RAL filtered"
 
             # Add in the training records
             for tr in trs:
-                if tr[0].startswith("TEST for ALL"): # Only in SHE spreadsheet
-                    self.trainings_status[nName][tr[0]] = (srv[tr[1][0]], "Not needed", "SHE")
+                if tr[0].startswith("TEST for ALL"):  # Only in SHE spreadsheet
+                    self.trainings_status[nName][tr[0]] = (
+                        srv[tr[1][0]],
+                        "Not needed",
+                        "SHE",
+                    )
                 else:
                     self.updateTraining(nName, tr[0], srv[tr[1][0]], srv[tr[1][1]], "SHE")
                     if tr[0].startswith("Man Hand"):
@@ -124,16 +149,17 @@ class staffMember:
         kount = 0
         for index, tR in totaraRecords.iterrows():
             kount = kount + 1
-            trd = tR.to_dict() # This works because apparently Totara records have a decent first row
+            trd = tR.to_dict()  # This works because apparently Totara records have a decent first row
             # print(trd)
 
             # Hopefully this takes care of ensuring that the person is in the department
-            if trd["Active/Deleted"] == "Deleted" : continue
-            if conf["department"] not in trd["User's Fullname"] and \
-               conf["department"] != trd["Department"]: continue
+            if trd["Active/Deleted"] == "Deleted":
+                continue
+            if conf["department"] not in trd["User's Fullname"] and conf["department"] != trd["Department"]:
+                continue
 
             nName = trd["User First Name"] + " " + trd["User Last Name"]
-            if nName in conf["totara_leftDept"]: # Has left for Germany
+            if nName in conf["totara_leftDept"]:  # Has left for Germany
                 continue
             if nName == "Kate Richards":
                 nName = "Katherine (Kate) Richards"
@@ -153,12 +179,12 @@ class staffMember:
                 ufn = trd["User's Fullname"]
                 loc = "Unknown"
                 if "(" in ufn:
-                    ulo = ufn[ufn.index("(")+1:-1]
+                    ulo = ufn[ufn.index("(") + 1 : -1]
                     loc = ulo.split(",")[1]
                 self.person[nName]["Location"] = loc
 
             # Some clean up of the course names
-            course = trd['Course Name']
+            course = trd["Course Name"]
             # if course not in c2:
             #     c2.append(course)
             if course.lower().startswith("sc") or course.startswith("Restored"):
@@ -189,40 +215,55 @@ class staffMember:
                 trg = "STFC H&S BiteSize"
                 okay = True
             if okay:
-                self.updateTraining(nName, trg, trd['Completion Status'], trd['The completion date'], "Totara")
+                self.updateTraining(
+                    nName,
+                    trg,
+                    trd["Completion Status"],
+                    trd["The completion date"],
+                    "Totara",
+                )
         return 0
 
     def printTotaraUpates(self, conf, debug=False):
         for uid in self.nList:
-            if self.person[uid]["Location"] != "RAL filtered" : continue
+            if self.person[uid]["Location"] != "RAL filtered":
+                continue
             for tr in conf["she_trainings"]:
                 training = tr[0]
-                if training not in self.trainings_status[uid].keys(): continue
-                if training.startswith("TEST for ALL"): continue
+                if training not in self.trainings_status[uid].keys():
+                    continue
+                if training.startswith("TEST for ALL"):
+                    continue
                 if self.trainings_status[uid][training][2] == "Totara":
                     print(f"{uid:20s} {training:25s} {str(self.trainings_status[uid][training][1])[:10]}")
 
     def updateTraining(self, uid, training, stat, date, info):
-        if training not in self.trainings_status[uid]: # new record
-            if type(date) == type(1.0) or isinstance(date, type(pd.NaT)) or isinstance(date, type(None)): # Invalid date - enter a simple default
+        if training not in self.trainings_status[uid]:  # new record
+            if (
+                type(date) == type(1.0) or isinstance(date, type(pd.NaT)) or isinstance(date, type(None))
+            ):  # Invalid date - enter a simple default
                 self.trainings_status[uid][training] = (stat, "0/0/0", info)
             elif type(date) == type("a") and "/" not in date:
                 self.trainings_status[uid][training] = (stat, date, info)
             else:
                 # print(date, type(date))
-                self.trainings_status[uid][training] = (stat, parse(str(date)), info)
+                self.trainings_status[uid][training] = (
+                    stat,
+                    parse(str(date)),
+                    info,
+                )
             return
 
         # Is the new date valid?
         try:
             dnew = parse(str(date))
         except:
-            return # Nothing to do - new date is crappy
+            return  # Nothing to do - new date is crappy
 
         # Bad old date - but good new date!
         try:
             dold = parse(str(self.trainings_status[uid][training][1]))
-        except: #Hmmm - new date is okay (hopefully)
+        except:  # Hmmm - new date is okay (hopefully)
             self.trainings_status[uid][training] = (stat, dnew, info)
             return
 

@@ -34,8 +34,8 @@ deptStaff.addDepartment(cdrList, debug=debug)
 
 os.unlink(cdr_file)  # Clean up
 
-# print("Making Department organogram")
-# makeOrganogram(deptStaff)
+print("Making Department organogram")
+makeOrganogram(deptStaff)
 # print(deptStaff.eList)
 # sys.exit()
 
@@ -78,9 +78,7 @@ if totara_file.endswith("csv"):
 else:
     totara_table = pd.read_excel(totara_file, engine="openpyxl")
 print("Totara table obtained on ", tot_time)
-deptStaff.addTotaraRecords(
-    totara_table, configuration.config, fileTime=tot_time, debug=debug
-)
+deptStaff.addTotaraRecords(totara_table, configuration.config, fileTime=tot_time, debug=debug)
 os.unlink(totara_file)  # Clean up
 
 deptStaff.printTotaraUpates(configuration.config)

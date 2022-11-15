@@ -1,24 +1,112 @@
 <!DOCTYPE html>
 <html>
   <head>
-    <title>SHE manager display page for {{my_string}}</title>
+    <title>SHE manager display page for {{me}}</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <style type="text/css">
-      .container {
-        max-width: 500px;
-        padding-top: 100px;
-      }
-    </style>
+<style>
+
+iframe {
+    border: 0px;
+    width: 100%;
+}
+
+ul, #myUL {
+  list-style-type: none;
+}
+
+#myUL {
+  margin: 0;
+  padding: 0;
+}
+
+.box {
+  cursor: pointer;
+  -webkit-user-select: none; /* Safari 3.1+ */
+  -moz-user-select: none; /* Firefox 2+ */
+  -ms-user-select: none; /* IE 10+ */
+  user-select: none;
+}
+
+.box::before {
+  content: "\FF0B";
+  color: black;
+  display: inline-block;
+  margin-right: 6px;
+}
+
+.check-box::before {
+  content: "\2212"; 
+  color: dodgerblue;
+}
+
+.nested {
+  display: none;
+}
+
+.active {
+  display: block;
+}
+.container {
+  max-width: 500px;
+  padding-top: 100px;
+}
+
+{% macro myWorkers(person, eList) -%}
+          {% for n in eList -%}
+            {% set myOkay = '/data/pulshe/training/' + dept + '/' + n + '/ok' %}
+            {% if eList[n] -%}
+              {% if os.path.exists(myOkay) %}
+                <li><span class="box" style='color:green'><a href={{ url_for('onePerson', dept=dept, user=n) }}>{{n}}</a>&#9632;</span>
+              {% else %}
+                <li><span class="box" style='color:red'><a href={{ url_for('onePerson', dept=dept, user=n) }}>{{n}} </a>&#9632;</span>
+              {% endif %}
+              <ul class="nested">
+              {{ myWorkers(n, eList[n]) }}
+            {% else -%}
+              {% if os.path.exists(myOkay) %}
+                <li><a href={{ url_for('onePerson', dept=dept, user=n) }}>{{n}}</a><span style='color:green'>&#9632;</span></li>
+              {% else %}
+                <li><a href={{ url_for('onePerson', dept=dept, user=n) }}>{{n}}</a><span style='color:red'>&#9632;</span></li>
+              {% endif %}
+            {%- endif %}
+          {%- endfor %}
+          </li>
+        </ul>
+        </li>
+{%- endmacro %}
+
+</style>
   </head>
   <body>
-    <div class="container">
-      <p>My SHE information: <a href={{ url_for('onePerson', user=my_string) }}>{{my_string}}</a></p>
-      <p>Information for employees who report directly to me:</p>
-      <ul>
-        {% for n in my_employees %}
-        <li><a href={{ url_for('onePerson', user=n) }}>{{n}}</a></li>
-        {% endfor %}
-      </ul>
-    </div>
+    <iframe id="inlineFrameExample"
+      iframeElement.src=iframeElement.src
+      title="Manager's page"
+      width=900
+      height=500
+      src="/ppd/ppd/{{ me }}">
+    </iframe>
+    {% if showTable %}
+      <p>Department Summary table : <a href={{ url_for('summaryTable', dept=dept, type=1) }}> Summary Table </a></p>
+      <p>Department Summary summary : <a href={{ url_for('summaryTable', dept=dept, type=2) }}> Summary summary Table </a></p>
+    {% endif %}
+
+    <p>Information for employees who report to me:</p>
+
+    <ul id="myUL">
+      {{ myWorkers(me, organogram) }}
+    </ul>
+
+<script>
+var toggler = document.getElementsByClassName("box");
+var i;
+
+for (i = 0; i < toggler.length; i++) {
+  toggler[i].addEventListener("click", function() {
+    this.parentElement.querySelector(".nested").classList.toggle("active");
+    this.classList.toggle("check-box");
+  });
+}
+</script>
+
   </body>
 </html>
