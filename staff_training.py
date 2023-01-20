@@ -11,6 +11,9 @@ class staffMember:
         self.trainings_dueDate = {}  # The trainings associated to person
         self.eList = []  # List of all email addresses (sanity check for duplication)
 
+        # Radiation trainings
+        self.rad_training_status = {}
+
         # List of all "names" = Forename Surname (Totara does not return initials?)
         self.nList = []  # This is the list of all the Unique IDs (UID) as defined in addPerson
         self.SHE_spreadsheet_date = ""
@@ -47,6 +50,7 @@ class staffMember:
         self.person[UID]["Location"] = "Unknown"
         self.trainings_status[UID] = {}
         self.trainings_dueDate[UID] = {}
+        self.rad_training_status[UID] = {}
         self.nList.append(nName)
         self.nStaff = self.nStaff + 1
         return 0
@@ -138,6 +142,14 @@ class staffMember:
                     self.updateTraining(nName, tr[0], srv[tr[1][0]], srv[tr[1][1]], "SHE")
                     if tr[0].startswith("Man Hand"):
                         self.updateTraining(nName, tr[0], srv[tr[1][0]], srv[tr[1][2]], "SHE")
+
+            # Right now only available in the SHE spreadsheet. Don't bother to check Totara
+            for rTr in conf["rad_trainings"]:
+                rDate = ""
+                if srv[rTr[1]] != None:
+                    rDate = parse(str(srv[rTr[1]]))
+                self.rad_training_status[nName][rTr[0]] = rDate
+
         return 0
 
     def addTotaraRecords(self, totaraRecords, conf, fileTime, debug=False):

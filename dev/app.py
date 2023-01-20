@@ -20,8 +20,7 @@ sheResponsibles = [
 ]
 
 # Overall manager!
-specialViewers = ["debbie.loader@stfc.ac.uk",
-"raja.nandakumar@stfc.ac.uk"]
+specialViewers = ["debbie.loader@stfc.ac.uk", "raja.nandakumar@stfc.ac.uk"]
 
 
 @app.route("/")

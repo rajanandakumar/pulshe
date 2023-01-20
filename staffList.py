@@ -4,6 +4,7 @@ import numpy as np
 import staff_training as st
 from writeOutData import writeOutTrainings
 from writeOutReport import writeOutReports
+from writeOutRadReport import writeOutRadReport
 from organogram import makeOrganogram
 from get_files import get_cdr_file, get_she_file, get_totara_file
 
@@ -49,9 +50,8 @@ print("\nTime of current run : ", today[:19])
 
 # Get the SHE statuses
 print("\nObtaining and processing SHE records")
-# she_file = "SHETrainingRecords.xlsm"
-# she_file = "SHETrainingRecords-31May2022.xlsm"
-she_file = "SHETrainingRecords-30Sep2022.xlsm"
+# she_file = "SHETrainingRecords-31Oct2022.xlsm"
+she_file = configuration.config["she_filename"]
 print("SHE spreadsheet used : ", she_file)
 status, she_time = get_she_file(loc=she_file, department=department, debug=debug)
 if not status:
@@ -110,3 +110,4 @@ print("All done")
 print("\nWriting out html output files")
 writeOutTrainings(deptStaff, configuration.config)
 writeOutReports(deptStaff, configuration.config)
+writeOutRadReport(deptStaff, configuration.config)

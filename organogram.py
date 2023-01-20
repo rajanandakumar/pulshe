@@ -4,17 +4,22 @@ import ldap3, json
 def makeOrganogram(staff):
     connection = make_connection()
     organogram = {}
+    # print(staff.nList)
     for uid in staff.nList:
         employees = query_cdr(connection, staff.person[uid]["Email"], "eMail")
         emList = []
+        # if uid == "Dave Newbold":
+        #     print(employees)
         for employee in employees:
             ee = employee.decode()
             fID = ee.split(",")[0][3:]
             eem = query_cdr(connection, fID, "federalID")
             if len(eem) == 1:  # Do they really exist in CDR?
                 eMail = eem[0].decode()
-                if eMail in staff.eList:
-                    emList.append(eMail)
+                # if uid == "Dave Newbold":
+                #     print(employee, eem, eMail)
+                if eMail.lower() in staff.eList:
+                    emList.append(eMail.lower())
         if emList:
             organogram[staff.person[uid]["Email"]] = emList
     # organogram["debbie.loader@stfc.ac.uk"] = staff.eList
