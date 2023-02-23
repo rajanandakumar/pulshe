@@ -84,7 +84,9 @@ def writeOutNonMandTraining(hOut, conf, training_status):
     hOut.write(
         """<p><table><tr><th>Non-mandatory SHE training</th><th> Status </th><th> Date last completed</th><th> Training expiry date</th></tr>\n"""
     )
-    print(training_status)
+    for k, v in training_status.items():
+        if v:
+            hOut.write(f"<tr><td> {k} </td> <td> {v} </td> <td></td> <td></td>")
     hOut.write("</table>")
 
 
