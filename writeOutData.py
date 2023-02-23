@@ -68,7 +68,7 @@ def writeOutTrainings(staff, conf, debug=False):
         f = open(fname, "w")
         writeOutHeader(f, uid, she_sheet_date, non_mand=True)
         writeOutNonMandTraining(f, conf, status[1])
-        writeOutFooter(f)
+        writeOutFooter(f, non_mand=True)
         f.close()
 
 def writeOKay(path, okay=False):
