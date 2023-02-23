@@ -130,6 +130,8 @@ class staffMember:
                 print(f"addSHERecords - Unidentified name (left?) :{nName}")
                 continue
             self.person[nName]["Location"] = "RAL filtered"
+            print(srv)
+            sys.exit()
 
             # Add in the training records
             for tr in trs:
