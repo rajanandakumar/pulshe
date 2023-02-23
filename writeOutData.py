@@ -224,9 +224,10 @@ def writeOutHeader(hOut, uid, totara_date, non_mand=False):
     hOut.write("\n")
 
 
-def writeOutFooter(hOut):
+def writeOutFooter(hOut, non_mand=False):
     hOut.write("\n<p>\n")
-    hOut.write(
+    if not non_mand:
+        hOut.write(
         """<p style="border: 1px solid lightgray; background: lightyellow; font-size:20px">
 The links above will each take you directly to the relevant online training. Make sure you are logged
 in first <a href="https://lmsweb.stfc.ac.uk/moodle/totara/dashboard/" target="_blank" rel="noopener noreferrer"> here in the totara portal </a>
