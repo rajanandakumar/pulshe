@@ -152,17 +152,17 @@ class staffMember:
             # Right now only available in the SHE spreadsheet. Don't bother to check Totara
             for rTr in conf["rad_trainings"]:
                 rDate = ""
-                if srv[rTr[1]] != None:
+                if srv[rTr[1]] != None and srv[rTr[1]] != "NR":
                     rDate = parse(str(srv[rTr[1]]))
                 self.rad_training_status[nName][rTr[0]] = rDate
             for rTr in conf["coshh_trainings"]:
                 rDate = ""
-                if srv[rTr[1]] != None:
+                if srv[rTr[1]] != None and srv[rTr[1]] != "NR":
                     rDate = parse(str(srv[rTr[1]]))
                 self.coshh_training_status[nName][rTr[0]] = rDate
             for rTr in conf["laser_trainings"]:
                 rDate = ""
-                if srv[rTr[1]] != None:
+                if srv[rTr[1]] != None and srv[rTr[1]] != "NR":
                     rDate = parse(str(srv[rTr[1]]))
                 self.laser_training_status[nName][rTr[0]] = rDate
             for rTr in conf["misc_trainings"]:

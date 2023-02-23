@@ -3,6 +3,35 @@ from dateutil.relativedelta import relativedelta
 from dateutil.parser import parse
 import pandas as pd
 
+def okayToWrite(conf, uid, staff):
+    oStatus = False
+    rad_due = {}
+
+    report_list = ["misc_trainings", "coshh_trainings", "laser_trainings", "rad_trainings"]
+    for report in report_list:    
+        if report == "misc_trainings":
+            radTr = staff.misc_training_status[uid]
+        elif report == "coshh_trainings":
+            radTr = staff.coshh_training_status[uid]
+        elif report == "laser_trainings":
+            radTr = staff.laser_training_status[uid]
+        elif report == "rad_trainings":
+            radTr = staff.rad_training_status[uid]
+
+        for tr in conf[report]:
+            training = tr[0]
+            dTrn = radTr[training]
+            rad_due[training] = dTrn
+            if type(dTrn) == type("a"):
+                continue
+            oStatus = True
+            dDue = dTrn + relativedelta(years=+5)
+            dNow = datetime.datetime.now()
+            colour = "#f6566b"
+            if dDue > dNow:
+                colour = "#99ee99"
+            rad_due[training] = (dDue, colour)
+    return (oStatus, rad_due)
 
 def writeOutTrainings(staff, conf, debug=False):
     outDir = "training"
@@ -12,7 +41,6 @@ def writeOutTrainings(staff, conf, debug=False):
         ff = "index.html"  # Keep the file name simple
         outSubdir = outDir + "/" + staff.person[uid]["Email"]  # Person identified by email
         fname = outSubdir + "/" + ff
-        # if uid != "Raja Nandakumar": continue
 
         pathlib.Path(outSubdir).mkdir(exist_ok=True)  # Hope it does not crash?
 
@@ -26,6 +54,20 @@ def writeOutTrainings(staff, conf, debug=False):
             writeOKay(outSubdir, okay=True)
         # print(uid, nOKTrs, len(conf["she_trainings"]))
 
+        # Write out the miscellaneous trainings as a separate file
+        status = okayToWrite(conf, uid, staff)
+        if not status[0]:
+            # No non-mandatory trainings done
+            continue
+        ff = "non_mandatory.html"
+        outSubdir = outDir + "/" + staff.person[uid]["Email"]  # Person identified by email
+        fname = outSubdir + "/" + ff
+        f = open(fname, "w")
+        writeOutHeader(f, uid, she_sheet_date, non_mand=True)
+        print(fname)
+        print(status[1])
+        writeOutFooter(f)
+        f.close()
 
 def writeOKay(path, okay=False):
     fnam = path + "/ok"
@@ -126,14 +168,11 @@ def writeOutTraining(hOut, conf, uid, training_status, tr_dueDate):
     return nOKTrainings
 
 
-def writeOutHeader(hOut, uid, totara_date):
-    hOut.write(
-        """
-<HEAD>
-    <TITLE>PPD SHE trainings record for %s</TITLE>
-"""
-        % uid
-    )
+def writeOutHeader(hOut, uid, totara_date, non_mand=False):
+    if non_mand:
+        hOut.write(f"<HEAD>\n  <TITLE>PPD non mandatory trainings record for {uid}</TITLE>")
+    else:
+        hOut.write(f"<HEAD>\n  <TITLE>PPD SHE trainings record for {uid}</TITLE>")
     hOut.write(
         """
     <style type="text/css">
@@ -160,8 +199,11 @@ def writeOutHeader(hOut, uid, totara_date):
 <BODY>
 """
     )
-    hOut.write("""<p style="font-size:25px">Mandatory training status for %s </p>""" % uid)
-    hOut.write("""<p style="font-size:20px">Report preparation date: %s </p>\n""" % str(totara_date)[:10])
+    if non_mand:
+        hOut.write("""<p style="font-size:25px">Non-Mandatory training status for %s </p>""" % uid)
+    else:
+        hOut.write("""<p style="font-size:25px">Mandatory training status for %s </p>""" % uid)
+        hOut.write("""<p style="font-size:20px">Report preparation date: %s </p>\n""" % str(totara_date)[:10])
     hOut.write("\n")
 
 
