@@ -131,6 +131,7 @@ class staffMember:
                 continue
             self.person[nName]["Location"] = "RAL filtered"
             print(srv)
+            import sys
             sys.exit()
 
             # Add in the training records
