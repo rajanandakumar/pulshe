@@ -11,8 +11,11 @@ class staffMember:
         self.trainings_dueDate = {}  # The trainings associated to person
         self.eList = []  # List of all email addresses (sanity check for duplication)
 
-        # Radiation trainings
-        self.rad_training_status = {}
+        # Non-mandatory trainings
+        self.rad_training_status = {} # Radiation
+        self.laser_training_status = {} # Lasers
+        self.coshh_training_status = {} # Chemicals
+        self.misc_training_status = {} # Other "stuff"
 
         # List of all "names" = Forename Surname (Totara does not return initials?)
         self.nList = []  # This is the list of all the Unique IDs (UID) as defined in addPerson
@@ -51,6 +54,9 @@ class staffMember:
         self.trainings_status[UID] = {}
         self.trainings_dueDate[UID] = {}
         self.rad_training_status[UID] = {}
+        self.laser_training_status[UID] = {} # Lasers
+        self.coshh_training_status[UID] = {} # Chemicals
+        self.misc_training_status[UID] = {} # Other "stuff"
         self.nList.append(nName)
         self.nStaff = self.nStaff + 1
         return 0
@@ -149,6 +155,21 @@ class staffMember:
                 if srv[rTr[1]] != None:
                     rDate = parse(str(srv[rTr[1]]))
                 self.rad_training_status[nName][rTr[0]] = rDate
+            for rTr in conf["coshh_trainings"]:
+                rDate = ""
+                if srv[rTr[1]] != None:
+                    rDate = parse(str(srv[rTr[1]]))
+                self.coshh_training_status[nName][rTr[0]] = rDate
+            for rTr in conf["laser_trainings"]:
+                rDate = ""
+                if srv[rTr[1]] != None:
+                    rDate = parse(str(srv[rTr[1]]))
+                self.laser_training_status[nName][rTr[0]] = rDate
+            for rTr in conf["misc_trainings"]:
+                rDate = ""
+                if srv[rTr[1]] != None:
+                    rDate = parse(str(srv[rTr[1]]))
+                self.misc_training_status[nName][rTr[0]] = rDate
 
         return 0
 

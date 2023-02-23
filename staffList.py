@@ -5,6 +5,7 @@ import staff_training as st
 from writeOutData import writeOutTrainings
 from writeOutReport import writeOutReports
 from writeOutRadReport import writeOutRadReport
+from writeOutNonMandReport import writeOutNonMandReport
 from organogram import makeOrganogram
 from get_files import get_cdr_file, get_she_file, get_totara_file
 
@@ -111,3 +112,7 @@ print("\nWriting out html output files")
 writeOutTrainings(deptStaff, configuration.config)
 writeOutReports(deptStaff, configuration.config)
 writeOutRadReport(deptStaff, configuration.config)
+writeOutNonMandReport(deptStaff, configuration.config, "rad_trainings")
+writeOutNonMandReport(deptStaff, configuration.config, "misc_trainings")
+writeOutNonMandReport(deptStaff, configuration.config, "laser_trainings")
+writeOutNonMandReport(deptStaff, configuration.config, "coshh_trainings")
