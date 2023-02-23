@@ -25,7 +25,7 @@ def okayToWrite(conf, uid, radTr):
     return (oStatus, rad_due)
 
 
-def writeOutNonMAndReportHeader(hOut, conf, she_date, report):
+def writeOutNonMandReportHeader(hOut, conf, she_date, report):
     if report == "misc_trainings":
         myStr = "miscellaneous"
     elif report == "laser_trainings":
