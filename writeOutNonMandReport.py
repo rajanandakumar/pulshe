@@ -106,7 +106,7 @@ def writeOutNonMandReport(staff, conf, report, debug=False):
             continue
 
         f = f_ral
-        xl = staff.person['Exchange']
+        xl = staff.person[uid]['Exchange']
         if isinstance(xl, str) and xl.lower().startswith("boulby"):
             f = f_boulby
 
