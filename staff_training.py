@@ -167,8 +167,7 @@ class staffMember:
                 self.laser_training_status[nName][rTr[0]] = rDate
             for rTr in conf["misc_trainings"]:
                 rDate = ""
-                if srv[rTr[1]] != None:
-                    print(rDate)
+                if srv[rTr[1]] != None and srv[rTr[1]] != "NR":
                     rDate = parse(str(srv[rTr[1]]))
                 self.misc_training_status[nName][rTr[0]] = rDate
 

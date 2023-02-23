@@ -36,7 +36,7 @@ config = {
         ("STFC SHE Training for Non-Technical Managers (SHE Code 10 - SC1004)", 55,""), # BD
         ("PAT Testing (SHE Code 17 - SC1701)", 66,""), # BO
 
-        ("Building Warden (SHE Code 32 - SC3201) ", 92,""), # CO
+        ("Building Warden (SHE Code 32 - SC3201)", 92,""), # CO
         ("Building Warden (Refresher) (SHE Code 32 - SC3202)", 93,""), # CP
 
         ("Gas Cylinder Safety Awareness (SHE Code 33 - SC3301)", 98,""), # CU
