@@ -19,6 +19,9 @@ def okayToWrite(conf, uid, report, staff):
     elif report == "rad_trainings":
         radTr = staff.rad_training_status[uid]
 
+    if not radTr:
+        return(False, {})
+
     for tr in conf[report]:
         training = tr[0]
         dTrn = radTr[training]
