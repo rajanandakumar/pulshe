@@ -25,44 +25,6 @@ def okayToWrite(conf, uid, radTr):
     return (oStatus, rad_due)
 
 
-def writeOutNonMandReport(staff, conf, report, debug=False):
-    outDir = "training"
-    fileName = outDir + "/ppd-" + report + "-" + str(uuid.uuid4()) + ".html"
-    SHE_sheet_date = staff.SHE_spreadsheet_date
-    f = open(fileName, "w")
-    writeOutNonMandReportHeader(f, conf, SHE_sheet_date, report)
-
-    for uid in staff.nList:
-        if staff.person[uid]["Location"] != "RAL filtered":
-            continue
-
-        if report == "misc_trainings":
-            status = okayToWrite(conf, uid, staff.misc_training_status[uid])
-        elif report == "coshh_trainings":
-            status = okayToWrite(conf, uid, staff.coshh_training_status[uid])
-        elif report == "laser_trainings":
-            status = okayToWrite(conf, uid, staff.laser_training_status[uid])
-        elif report == "rad_trainings":
-            status = okayToWrite(conf, uid, staff.rad_training_status[uid])
-
-        if not status[0]:
-            # Person has had no rad training ever
-            continue
-        radDue = status[1]
-        f.write("""<tr><td style="background-color:white"> %s</td>""" % uid)
-        for tr in conf[report]:
-            training = tr[0]
-            if radDue[training] == "":
-                f.write("""<td style="background-color:%s"> %s</td>""" % ("white", ""))
-            else:
-                rOut = str(radDue[training][0])[:10]
-                f.write("""<td style="background-color:%s"> %s</td>""" % (radDue[training][1], rOut))
-        f.write("</tr>\n")
-    print("\n")
-    writeOutNonMandReportFooter(f)
-    f.close()
-
-
 def writeOutNonMAndReportHeader(hOut, conf, she_date, report):
     if report == "misc_trainings":
         myStr = "miscellaneous"
@@ -118,3 +80,41 @@ def writeOutNonMandReportFooter(hOut):
 </html>
 """
     )
+
+def writeOutNonMandReport(staff, conf, report, debug=False):
+    outDir = "training"
+    fileName = outDir + "/ppd-" + report + "-" + str(uuid.uuid4()) + ".html"
+    SHE_sheet_date = staff.SHE_spreadsheet_date
+    f = open(fileName, "w")
+    writeOutNonMandReportHeader(f, conf, SHE_sheet_date, report)
+
+    for uid in staff.nList:
+        if staff.person[uid]["Location"] != "RAL filtered":
+            continue
+
+        if report == "misc_trainings":
+            status = okayToWrite(conf, uid, staff.misc_training_status[uid])
+        elif report == "coshh_trainings":
+            status = okayToWrite(conf, uid, staff.coshh_training_status[uid])
+        elif report == "laser_trainings":
+            status = okayToWrite(conf, uid, staff.laser_training_status[uid])
+        elif report == "rad_trainings":
+            status = okayToWrite(conf, uid, staff.rad_training_status[uid])
+
+        if not status[0]:
+            # Person has had no rad training ever
+            continue
+        radDue = status[1]
+        f.write("""<tr><td style="background-color:white"> %s</td>""" % uid)
+        for tr in conf[report]:
+            training = tr[0]
+            if radDue[training] == "":
+                f.write("""<td style="background-color:%s"> %s</td>""" % ("white", ""))
+            else:
+                rOut = str(radDue[training][0])[:10]
+                f.write("""<td style="background-color:%s"> %s</td>""" % (radDue[training][1], rOut))
+        f.write("</tr>\n")
+    print("\n")
+    writeOutNonMandReportFooter(f)
+    f.close()
+
