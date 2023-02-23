@@ -98,7 +98,8 @@ def writeOutNonMandReport(staff, conf, report, debug=False):
     SHE_sheet_date = staff.SHE_spreadsheet_date
     f_ral = open(file_ral, "w")
     f_boulby = open(file_boulby, "w")
-    writeOutNonMandReportHeader(f, conf, SHE_sheet_date, report)
+    writeOutNonMandReportHeader(f_ral, conf, SHE_sheet_date, report)
+    writeOutNonMandReportHeader(f_boulby, conf, SHE_sheet_date, report)
 
     for uid in staff.nList:
         if staff.person[uid]["Location"] != "RAL filtered":
