@@ -64,13 +64,12 @@ def writeOutTrainings(staff, conf, debug=False):
         if not status[0]:
             # No non-mandatory trainings done
             continue
-        print(fname)
-        print(status[1])
         ff = "non_mandatory.html"
         outSubdir = outDir + "/" + staff.person[uid]["Email"]  # Person identified by email
         fname = outSubdir + "/" + ff
         f = open(fname, "w")
         writeOutHeader(f, uid, she_sheet_date, non_mand=True)
+        writeOutNonMandTraining(f, conf, status[1])
         writeOutFooter(f)
         f.close()
 
@@ -81,6 +80,14 @@ def writeOKay(path, okay=False):
             os.unlink(fnam)
     else:
         open(fnam, "a").close()  # Just need an empty file
+
+def writeOutNonMandTraining(hOut, conf, training_status):
+    hOut.write("""<hr align="center" width="70%">\n""")
+    hOut.write(
+        """<p><table><tr><th>Non-mandatory SHE training</th><th> Status </th><th> Date last completed</th><th> Training expiry date</th></tr>\n"""
+    )
+    print(training_status)
+    hOut.write("</table>")
 
 
 def writeOutTraining(hOut, conf, uid, training_status, tr_dueDate):
