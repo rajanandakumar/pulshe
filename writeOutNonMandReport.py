@@ -25,7 +25,7 @@ def okayToWrite(conf, uid, radTr):
     return (oStatus, rad_due)
 
 
-def writeOutNonMandReport(staff, conf, report debug=False):
+def writeOutNonMandReport(staff, conf, report, debug=False):
     outDir = "training"
     fileName = outDir + "/ppd-" + report + "-" + str(uuid.uuid4()) + ".html"
     SHE_sheet_date = staff.SHE_spreadsheet_date
