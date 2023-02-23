@@ -91,7 +91,7 @@ def writeOutNonMandTraining(hOut, conf, training_status):
             status = "Expired"
             if col == '#99ee99':
                 status = "OK"
-            hOut.write(f"<tr><td> {k} </td> <td  style="background-color:{col}">> {status} </td> <td> {dat} </td>")
+            hOut.write(f"<tr><td> {k} </td> <td  style='background-color:{col}'> {status} </td> <td> {dat} </td>")
     hOut.write("</table>")
 
 
