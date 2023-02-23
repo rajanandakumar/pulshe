@@ -18,6 +18,9 @@ def okayToWrite(conf, uid, staff):
         elif report == "rad_trainings":
             radTr = staff.rad_training_status[uid]
 
+        if not radTr: # Not a staff, fixed term or agency
+            continue
+
         for tr in conf[report]:
             training = tr[0]
             print(training)
