@@ -6,10 +6,20 @@ import uuid
 # Do the minimal outside of this place. All the needed manipulations of the rad data are here.
 
 
-def okayToWrite(conf, uid, radTr):
+def okayToWrite(conf, uid, report, staff):
     oStatus = False
     rad_due = {}
-    for tr in conf["rad_trainings"]:
+
+    if report == "misc_trainings":
+        radTr = staff.misc_training_status[uid]
+    elif report == "coshh_trainings":
+        radTr = staff.coshh_training_status[uid]
+    elif report == "laser_trainings":
+        radTr = staff.laser_training_status[uid]
+    elif report == "rad_trainings":
+        radTr = staff.rad_training_status[uid]
+
+    for tr in conf[report]:
         training = tr[0]
         dTrn = radTr[training]
         rad_due[training] = dTrn
@@ -92,14 +102,7 @@ def writeOutNonMandReport(staff, conf, report, debug=False):
         if staff.person[uid]["Location"] != "RAL filtered":
             continue
 
-        if report == "misc_trainings":
-            status = okayToWrite(conf, uid, staff.misc_training_status[uid])
-        elif report == "coshh_trainings":
-            status = okayToWrite(conf, uid, staff.coshh_training_status[uid])
-        elif report == "laser_trainings":
-            status = okayToWrite(conf, uid, staff.laser_training_status[uid])
-        elif report == "rad_trainings":
-            status = okayToWrite(conf, uid, staff.rad_training_status[uid])
+        status = okayToWrite(conf, uid, report, staff)
 
         if not status[0]:
             # Person has had no rad training ever
