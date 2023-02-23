@@ -170,7 +170,13 @@ class staffMember:
                 if srv[rTr[1]] != None and srv[rTr[1]] != "NR":
                     rDate = parse(str(srv[rTr[1]]))
                 self.misc_training_status[nName][rTr[0]] = rDate
-
+            if nName == "Zakariya Aliouche":
+                print("-"*20)
+                print(self.rad_training_status)
+                print(self.coshh_training_status)
+                print(self.laser_training_status)
+                print(self.misc_training_status)
+                print("-"*20)
         return 0
 
     def addTotaraRecords(self, totaraRecords, conf, fileTime, debug=False):
