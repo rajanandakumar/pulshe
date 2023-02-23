@@ -168,6 +168,7 @@ class staffMember:
             for rTr in conf["misc_trainings"]:
                 rDate = ""
                 if srv[rTr[1]] != None:
+                    print(rDate)
                     rDate = parse(str(srv[rTr[1]]))
                 self.misc_training_status[nName][rTr[0]] = rDate
 
