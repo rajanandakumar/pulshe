@@ -82,11 +82,16 @@ def writeOKay(path, okay=False):
 def writeOutNonMandTraining(hOut, conf, training_status):
     hOut.write("""<hr align="center" width="70%">\n""")
     hOut.write(
-        """<p><table><tr><th>Non-mandatory SHE training</th><th> Status </th><th> Date last completed</th><th> Training expiry date</th></tr>\n"""
+        """<p><table><tr><th>Non-mandatory SHE training</th><th> Status </th><th> Training expiry date</th></tr>\n"""
     )
     for k, v in training_status.items():
         if v:
-            hOut.write(f"<tr><td> {k} </td> <td> {v} </td> <td></td> <td></td>")
+            col = v[1]
+            dat = v[0]
+            status = "Expired"
+            if col == '#99ee99':
+                status = "OK"
+            hOut.write(f"<tr><td> {k} </td> <td  style="background-color:{col}">> {status} </td> <td> {dat} </td>")
     hOut.write("</table>")
 
 
