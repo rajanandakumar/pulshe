@@ -93,14 +93,21 @@ def writeOutNonMandReportFooter(hOut):
 
 def writeOutNonMandReport(staff, conf, report, debug=False):
     outDir = "training"
-    fileName = outDir + "/ppd-" + report + "-" + str(uuid.uuid4()) + ".html"
+    file_ral = outDir + "/ppd-ral-" + report + "-" + str(uuid.uuid4()) + ".html"
+    file_boulby = outDir + "/ppd-boulby-" + report + "-" + str(uuid.uuid4()) + ".html"
     SHE_sheet_date = staff.SHE_spreadsheet_date
-    f = open(fileName, "w")
+    f_ral = open(file_ral, "w")
+    f_boulby = open(file_boulby, "w")
     writeOutNonMandReportHeader(f, conf, SHE_sheet_date, report)
 
     for uid in staff.nList:
         if staff.person[uid]["Location"] != "RAL filtered":
             continue
+
+        f = f_ral
+        xl = staff.person['Exchange']
+        if isinstance(xl, str) and xl.lower().startswith("boulby"):
+            f = f_boulby
 
         status = okayToWrite(conf, uid, report, staff)
 

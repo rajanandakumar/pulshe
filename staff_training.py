@@ -76,7 +76,6 @@ class staffMember:
     def addDepartment(self, cdrList, debug=False):
         for index, bx in cdrList.iterrows():
             person = bx.to_dict()
-            print(person)
             status = self.addPerson(person)
             if debug:
                 if status == -3:
