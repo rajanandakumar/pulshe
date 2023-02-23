@@ -14,11 +14,7 @@ config = {
         ("STFC H&S BiteSize", (27, 19), "https://lmsweb.stfc.ac.uk/moodle/course/view.php?id=46"),  #  AB T
         ("Fire test", (23, 14), "https://lmsweb.stfc.ac.uk/moodle/course/view.php?id=210"),  # X O
         ("DSE training test", (24, 15), "https://lmsweb.stfc.ac.uk/moodle/mod/scorm/view.php?id=534"),  # Y P
-        (
-            "DSE self assessment  test",
-            (25, 16),
-            "https://uk.sheassure.net/stfc/Portal/Create/Portal/3f31848b-ae08-4dd5-970e-8efc4808362c#/information",
-        ),  # Z Q
+        ("DSE self assessment  test", (25, 16), "https://app.uk.sheassure.net/ukri/p/STFC_Open_Z7GHXvqMA5/forms/7182"),  # Z Q
         ("Man Hand test", (26, 17, 18), "https://lmsweb.stfc.ac.uk/moodle/course/view.php?id=168"),  # AA R S
         ("Asbestos Essentials", (28, 20), "https://lmsweb.stfc.ac.uk/moodle/course/view.php?id=158"),  # AC  U
         ("Electrical Safety Essentials", (29, 21), "https://lmsweb.stfc.ac.uk/moodle/course/view.php?id=181"),  # AD V
