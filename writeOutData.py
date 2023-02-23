@@ -21,6 +21,7 @@ def okayToWrite(conf, uid, staff):
         for tr in conf[report]:
             training = tr[0]
             print(training)
+            print(radTr)
             dTrn = radTr[training]
             rad_due[training] = dTrn
             if type(dTrn) == type("a"):
@@ -60,13 +61,13 @@ def writeOutTrainings(staff, conf, debug=False):
         if not status[0]:
             # No non-mandatory trainings done
             continue
+        print(fname)
+        print(status[1])
         ff = "non_mandatory.html"
         outSubdir = outDir + "/" + staff.person[uid]["Email"]  # Person identified by email
         fname = outSubdir + "/" + ff
         f = open(fname, "w")
         writeOutHeader(f, uid, she_sheet_date, non_mand=True)
-        print(fname)
-        print(status[1])
         writeOutFooter(f)
         f.close()
 
