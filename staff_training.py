@@ -76,6 +76,7 @@ class staffMember:
     def addDepartment(self, cdrList, debug=False):
         for index, bx in cdrList.iterrows():
             person = bx.to_dict()
+            print(person)
             status = self.addPerson(person)
             if debug:
                 if status == -3:
@@ -130,9 +131,6 @@ class staffMember:
                 print(f"addSHERecords - Unidentified name (left?) :{nName}")
                 continue
             self.person[nName]["Location"] = "RAL filtered"
-            print(srv)
-            import sys
-            sys.exit()
 
             # Add in the training records
             for tr in trs:
