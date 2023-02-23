@@ -23,8 +23,6 @@ def okayToWrite(conf, uid, staff):
 
         for tr in conf[report]:
             training = tr[0]
-            print(training)
-            print(uid, radTr)
             dTrn = radTr[training]
             rad_due[training] = dTrn
             if type(dTrn) == type("a"):
