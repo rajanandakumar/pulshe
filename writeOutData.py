@@ -51,18 +51,20 @@ def writeOutTrainings(staff, conf, debug=False):
         writeOutHeader(f, uid, totara_sheet_date)
         nOKTrs = writeOutTraining(f, conf, uid, staff.trainings_status[uid], staff.trainings_dueDate[uid])
         writeOutFooter(f)
-        # f.close()
-        writeOKay(outSubdir)
-        if nOKTrs == len(conf["she_trainings"]) - 1:
-            writeOKay(outSubdir, okay=True)
-        # print(uid, nOKTrs, len(conf["she_trainings"]))
 
         # Write out the miscellaneous trainings if they exist
         status = okayToWrite(conf, uid, staff)
         if status[0]:
             writeOutNonMandTraining(f, conf, status[1])
-            writeOutFooter(f, non_mand=True)
+        writeOutFooter(f, non_mand=True)
         f.close()
+
+        # A status flag in the directory for flask
+        writeOKay(outSubdir)
+        if nOKTrs == len(conf["she_trainings"]) - 1:
+            writeOKay(outSubdir, okay=True)
+        # print(uid, nOKTrs, len(conf["she_trainings"]))
+
 
 def writeOKay(path, okay=False):
     fnam = path + "/ok"
