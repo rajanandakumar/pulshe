@@ -57,19 +57,11 @@ def writeOutTrainings(staff, conf, debug=False):
             writeOKay(outSubdir, okay=True)
         # print(uid, nOKTrs, len(conf["she_trainings"]))
 
-        # Write out the miscellaneous trainings as a separate file
+        # Write out the miscellaneous trainings if they exist
         status = okayToWrite(conf, uid, staff)
-        if not status[0]:
-            # No non-mandatory trainings done
-            f.close()
-            continue
-        # ff = "non_mandatory.html"
-        # outSubdir = outDir + "/" + staff.person[uid]["Email"]  # Person identified by email
-        # fname = outSubdir + "/" + ff
-        # f = open(fname, "w")
-        # writeOutHeader(f, uid, she_sheet_date, non_mand=True)
-        writeOutNonMandTraining(f, conf, status[1])
-        writeOutFooter(f, non_mand=True)
+        if status[0]:
+            writeOutNonMandTraining(f, conf, status[1])
+            writeOutFooter(f, non_mand=True)
         f.close()
 
 def writeOKay(path, okay=False):
@@ -232,7 +224,7 @@ def writeOutFooter(hOut, non_mand=False):
         """<p style="border: 1px solid lightgray; background: lightyellow; font-size:20px">
 The links above will each take you directly to the relevant online training. Make sure you are logged
 in first <a href="https://lmsweb.stfc.ac.uk/moodle/totara/dashboard/" target="_blank" rel="noopener noreferrer"> here in the totara portal </a>
-(opens in separate tab). </p>"""
+(opens in separate tab). </p>\n\n"""
     )
     else:
         hOut.write("\n")
