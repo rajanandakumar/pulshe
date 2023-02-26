@@ -67,7 +67,7 @@ def writeOutTrainings(staff, conf, debug=False):
         # outSubdir = outDir + "/" + staff.person[uid]["Email"]  # Person identified by email
         # fname = outSubdir + "/" + ff
         # f = open(fname, "w")
-        writeOutHeader(f, uid, she_sheet_date, non_mand=True)
+        # writeOutHeader(f, uid, she_sheet_date, non_mand=True)
         writeOutNonMandTraining(f, conf, status[1])
         writeOutFooter(f, non_mand=True)
         f.close()
