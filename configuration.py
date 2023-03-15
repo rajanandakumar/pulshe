@@ -1,7 +1,7 @@
 config = {
     "department": "PPD",  # Capitalisation matters
     # SHE spreadsheet columns we are interested in to select and identify staff
-    "she_filename": "SHETrainingRecords-31Dec2022.xlsm",
+    "she_filename": "SHETrainingRecords-09Mar2023.xlsm",
     "she_numColumns": 110,  # Minimum number of visible columns to be a valid row
     "she_forename": 4,
     "she_lastname": 3,
@@ -23,11 +23,11 @@ config = {
     "AllTraining": "TEST for ALL Mandatory Training",  # The test for all mandatory training
     # Non-mandatory radiation trainings as requested by Jens Dopke, Gary Zhang
     "rad_trainings": [
-        ("Radioactive Materials (RAM)", 81, ""),
-        ("STFC General Radiation Awareness (online)", 84, ""),
-        ("Working with ionising radiation (1 day)", 85, ""),
-        ("Working with ionising radiation (refresher, online)", 86, ""),
-        ("RPS (RAL / DL)", 87, ""),
+        ("Radioactive Materials (RAM)", 81, ""), # CD
+        ("STFC General Radiation Awareness (online)", 84, ""), # CG
+        ("Working with ionising radiation (1 day)", 85, ""), # CH
+        ("Working with ionising radiation (refresher, online)", 86, ""), # CI
+        ("RPS (RAL / DL)", 87, ""), # CJ
     ],
     # Non-mandatory miscellaneous trainings
     "misc_trainings": [
