@@ -67,6 +67,7 @@ config = {
         "Sandeep Rao Gopalam": "Sandeep Gopalam",
         "Nicholas Jones": "Nicholas Cleverly-Jones",
         "Calum Cox": "Callum Cox",
+        "Thomas Longman": "Tom Longman",
     },
     # People left but still in Totara spreadsheet
     "totara_leftDept": [
