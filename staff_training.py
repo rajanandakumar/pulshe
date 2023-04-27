@@ -275,6 +275,9 @@ class staffMember:
                     print(f"{uid:20s} {training:25s} {str(self.trainings_status[uid][training][1])[:10]}")
 
     def updateTraining(self, uid, training, stat, date, info):
+        if stat == "Not yet started":
+            return # Do not update the information from the SHE table
+
         if training not in self.trainings_status[uid]:  # new record
             if (
                 type(date) == type(1.0) or isinstance(date, type(pd.NaT)) or isinstance(date, type(None))

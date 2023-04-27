@@ -148,7 +148,7 @@ def writeOutTraining(hOut, conf, uid, training_status, tr_dueDate):
                 if not (training.startswith("Asbestos") or training.startswith("Electrical") or "BiteSize" in training):
                     col_date = "#ee9999"
                     if col == "#52D017":
-                        print("Error in status - reset colour.", uid, training)
+                        print("Error in status from SHE table - reset colour.", uid, training)
                         col = "#f6566b"
         if s_date == "0/0/0":  # Training not done / recorded
             col_date = "#ffa500"
