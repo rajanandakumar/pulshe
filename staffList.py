@@ -60,7 +60,7 @@ today = str(datetime.datetime.now())
 print("\nTime of current run : ", today[:19])
 
 # Organogram stuff
-print(f"CDR update neededs:")
+print(f"CDR update needs:")
 print(f"Staff who have left but are still in various linemanager chains in CDR:")
 for lStaff in leftStaff:
     print(f"{lStaff[0]:35s} {lStaff[1]:35s}  Manager : {lStaff[2]}")
