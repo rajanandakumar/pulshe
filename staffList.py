@@ -46,13 +46,15 @@ leftStaff = makeOrganogram(deptStaff)
 old_stdout = sys.stdout
 sys.stdout = mystdout = io.StringIO()
 
+
+
 today = str(datetime.datetime.now())
 print("\nTime of current run : ", today[:19])
 
 # Organogram stuff
 print(f"Staff who have left but are still in various linemager chains in CDR:")
 for lStaff in leftStaff:
-    print(lStaff)
+    print(f"{lStaff[0]:40s} {lStaff[1]:35s}  Manager : {lStaff[2]}")
 
 # Get the SHE statuses
 print("\nObtaining and processing SHE records")
