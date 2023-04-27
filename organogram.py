@@ -22,7 +22,11 @@ def makeOrganogram(staff):
                 if eMail.lower() in staff.eList:
                     emList.append(eMail.lower())
                 else:
-                    en = query_cdr(connection, fID, "displayNamePrintable")[0].decode()
+                    en = query_cdr(connection, fID, "displayNamePrintable")
+                    if len(en[0]) > 2:
+                        en = en[0].decode()
+                    else :
+                        en = "..."
                     staffWhoHaveLeft.append((en, eMail.lower(), uid))
         if emList:
             organogram[staff.person[uid]["Email"]] = emList
