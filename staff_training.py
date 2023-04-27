@@ -97,6 +97,7 @@ class staffMember:
         self.SHE_spreadsheet_date = fileTime
         trs = conf["she_trainings"]
         kount = 0
+        messages_leftPPD = []
         for index, sR in sheRecords.iterrows():
             kount = kount + 1
             srv = sR.values
@@ -127,7 +128,7 @@ class staffMember:
                 print(f"Still encountering wrong name - {nName}. Should be {cName}")
                 nName = cName
             if nName not in self.nList:
-                print(f"addSHERecords - Unidentified name (left?) :{nName}")
+                messages_leftPPD.append(f"addSHERecords - Unidentified name (left?) :{nName}")
                 continue
             self.person[nName]["Location"] = "RAL filtered"
 
@@ -165,6 +166,10 @@ class staffMember:
                 if srv[rTr[1]] != None and srv[rTr[1]] != "NR":
                     rDate = parse(str(srv[rTr[1]]))
                 self.misc_training_status[nName][rTr[0]] = rDate
+        uniq_leftPPD = set(messages_leftPPD)
+        leftPPD = list(uniq_leftPPD)
+        for mess in leftPPD:
+            print(mess)
         return 0
 
     def addTotaraRecords(self, totaraRecords, conf, fileTime, debug=False):
@@ -174,6 +179,7 @@ class staffMember:
         # totaraRecords = totaraRecords[index+1:]
         # totaraRecords.columns = new_header
         kount = 0
+        messages_missCDR = []
         for index, tR in totaraRecords.iterrows():
             kount = kount + 1
             trd = tR.to_dict()  # This works because apparently Totara records have a decent first row
@@ -199,7 +205,7 @@ class staffMember:
             if nName == "Nicholas Jones":
                 nName = "Nicholas Cleverly-Jones"
             if nName not in self.nList:
-                print("addTotaraRecords - Unidentified (missing in CDR?) :", nName)
+                messages_missCDR.append(f"addTotaraRecords - Unidentified (missing in CDR?) :{nName}")
                 continue
 
             if self.person[nName]["Location"] == "Unknown":
@@ -249,6 +255,10 @@ class staffMember:
                     trd["The completion date"],
                     "Totara",
                 )
+        uniq_missCDR = set(messages_missCDR)
+        missCDR = list(uniq_missCDR)
+        for mess in missCDR:
+            print(mess)
         return 0
 
     def printTotaraUpates(self, conf, debug=False):
