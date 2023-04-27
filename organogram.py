@@ -20,6 +20,8 @@ def makeOrganogram(staff):
                 #     print(employee, eem, eMail)
                 if eMail.lower() in staff.eList:
                     emList.append(eMail.lower())
+                else:
+                    print(f"User {eMail.lower()}")
         if emList:
             organogram[staff.person[uid]["Email"]] = emList
     # organogram["debbie.loader@stfc.ac.uk"] = staff.eList
