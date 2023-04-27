@@ -22,7 +22,7 @@ def makeOrganogram(staff):
                 if eMail.lower() in staff.eList:
                     emList.append(eMail.lower())
                 else:
-                    staffWhoHaveLeft.append(eMail.lower(), uid)
+                    staffWhoHaveLeft.append((eMail.lower(), uid))
                     en = query_cdr(connection, fID, "displayNamePrintable")
                     print(en)
         if emList:
