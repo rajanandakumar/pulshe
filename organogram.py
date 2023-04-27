@@ -43,6 +43,9 @@ def query_cdr(conn, tag, type):
     if type == "eMail":
         filter = "(userPrincipalName=" + tag + ")"
         attribute = "directreports"
+    elif type == "displayNamePrintable":
+        filter = "(sAMAccountName=" + tag + ")"
+        attribute = "displayNamePrintable"
     else:
         filter = "(sAMAccountName=" + tag + ")"
         attribute = "userPrincipalName"
