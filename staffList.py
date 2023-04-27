@@ -46,13 +46,22 @@ leftStaff = makeOrganogram(deptStaff)
 old_stdout = sys.stdout
 sys.stdout = mystdout = io.StringIO()
 
+print("""
+Unidentified name in SHE spreadsheet used means that this name is a PPD staff member in the SHE spreadsheet but is not in PPD according to CDR
 
+addTotaraRecords - Unidentified (missing in CDR?): this means that there is a person in Totara labelled as PPD staff but is not in PPD according to CDR
+
+The list at the end: These names are flagged as having outstanding training in the SHE spreadsheet but in Totara we find the training to be completed
+
+======================    
+    """)
 
 today = str(datetime.datetime.now())
 print("\nTime of current run : ", today[:19])
 
 # Organogram stuff
-print(f"Staff who have left but are still in various linemager chains in CDR:")
+print(f"CDR update neededs:")
+print(f"Staff who have left but are still in various linemanager chains in CDR:")
 for lStaff in leftStaff:
     print(f"{lStaff[0]:40s} {lStaff[1]:35s}  Manager : {lStaff[2]}")
 
