@@ -125,7 +125,7 @@ def writeOutNonMandReport(staff, conf, report, debug=False):
                 rOut = str(radDue[training][0])[:10]
                 f.write("""<td style="background-color:%s"> %s</td>""" % (radDue[training][1], rOut))
         f.write("</tr>\n")
-    print("\n")
+    # print("\n")
     writeOutNonMandReportFooter(f_ral)
     writeOutNonMandReportFooter(f_boulby)
     f_ral.close()
