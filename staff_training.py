@@ -132,6 +132,9 @@ class staffMember:
                 continue
             self.person[nName]["Location"] = "RAL filtered"
 
+            if nName == "Xin Shi":
+                print(nName, trs)
+
             # Add in the training records
             for tr in trs:
                 if tr[0].startswith("TEST for ALL"):  # Only in SHE spreadsheet
