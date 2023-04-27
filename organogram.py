@@ -23,7 +23,7 @@ def makeOrganogram(staff):
                     emList.append(eMail.lower())
                 else:
                     en = query_cdr(connection, fID, "displayNamePrintable")
-                    if len(en) > 2:
+                    if len(en) > 0:
                         en = en[0].decode()
                     else :
                         en = "..."
