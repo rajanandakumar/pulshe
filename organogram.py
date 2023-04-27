@@ -5,6 +5,7 @@ def makeOrganogram(staff):
     connection = make_connection()
     organogram = {}
     # print(staff.nList)
+    staffWhoHaveLeft = []
     for uid in staff.nList:
         employees = query_cdr(connection, staff.person[uid]["Email"], "eMail")
         emList = []
@@ -21,12 +22,15 @@ def makeOrganogram(staff):
                 if eMail.lower() in staff.eList:
                     emList.append(eMail.lower())
                 else:
-                    print(f"User {eMail.lower()}")
+                    staffWhoHaveLeft.append(eMail.lower(), uid)
+                    en = query_cdr(connection, fID, "displayNamePrintable")
+                    print(en)
         if emList:
             organogram[staff.person[uid]["Email"]] = emList
     # organogram["debbie.loader@stfc.ac.uk"] = staff.eList
     with open("ppd_organogram.json", "w") as file:
         file.write(json.dumps(organogram, indent=2))
+    return staffWhoHaveLeft
 
 
 def make_connection():
