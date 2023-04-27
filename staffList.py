@@ -37,7 +37,7 @@ deptStaff.addDepartment(cdrList, debug=debug)
 os.unlink(cdr_file)  # Clean up
 
 print("Making Department organogram")
-makeOrganogram(deptStaff)
+leftStaff = makeOrganogram(deptStaff)
 # print(deptStaff.eList)
 # sys.exit()
 
@@ -48,6 +48,11 @@ sys.stdout = mystdout = io.StringIO()
 
 today = str(datetime.datetime.now())
 print("\nTime of current run : ", today[:19])
+
+# Organogram stuff
+print(f"Staff who have left but are still in various linemager chains in CDR:")
+for lStaff in leftStaff:
+    print(lStaff)
 
 # Get the SHE statuses
 print("\nObtaining and processing SHE records")

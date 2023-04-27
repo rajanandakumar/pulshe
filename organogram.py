@@ -22,9 +22,8 @@ def makeOrganogram(staff):
                 if eMail.lower() in staff.eList:
                     emList.append(eMail.lower())
                 else:
-                    staffWhoHaveLeft.append((eMail.lower(), uid))
-                    en = query_cdr(connection, fID, "displayNamePrintable")
-                    print(en)
+                    en = query_cdr(connection, fID, "displayNamePrintable")[0].decode()
+                    staffWhoHaveLeft.append((en, eMail.lower(), uid))
         if emList:
             organogram[staff.person[uid]["Email"]] = emList
     # organogram["debbie.loader@stfc.ac.uk"] = staff.eList
