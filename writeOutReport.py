@@ -16,8 +16,9 @@ def writeOutReports(staff, conf, debug=False):
     for tr in conf["she_trainings"]:
         nUpToDate[tr[0]] = 0
 
-    print("\nRecords updated from Totara ...")
-    print(f"Name                 Training               DateOfCompletion")
+    if debug:
+        print("\nRecords updated from Totara ...")
+        print(f"Name                 Training               DateOfCompletion")
     for uid in staff.nList:
         if staff.person[uid]["Location"] != "RAL filtered" : continue
         # if staff.person[uid]["Building"] == "Remote working" : continue
@@ -34,11 +35,11 @@ def writeOutReports(staff, conf, debug=False):
             if staff.trainings_dueDate[uid][training][1] == "#99ee99":
                 nUpToDate[training] = nUpToDate[training] + 1
             if staff.trainings_status[uid][training][2] == "Totara":
-               print(f"{uid:20s} {training:25s} {str(staff.trainings_status[uid][training][1])[:10]}")
+                if debug:
+                    print(f"{uid:20s} {training:25s} {str(staff.trainings_status[uid][training][1])[:10]}")
             # print(staff.trainings_status[uid][training][2])
         # writeOutTraining(f, conf, uid, staff.trainings_status[uid])
         f.write("</tr>\n")
-    print("\n")
     writeOutReportFooter(f)
     f.close()
 
