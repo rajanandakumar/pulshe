@@ -53,7 +53,7 @@ addTotaraRecords - Unidentified (missing in CDR?): this means that there is a pe
 
 The list at the end: These names are flagged as having outstanding training in the SHE spreadsheet but in Totara we find the training to be completed
 
-======================    
+======================
     """)
 
 today = str(datetime.datetime.now())
@@ -63,7 +63,7 @@ print("\nTime of current run : ", today[:19])
 print(f"CDR update neededs:")
 print(f"Staff who have left but are still in various linemanager chains in CDR:")
 for lStaff in leftStaff:
-    print(f"{lStaff[0]:40s} {lStaff[1]:35s}  Manager : {lStaff[2]}")
+    print(f"{lStaff[0]:35s} {lStaff[1]:35s}  Manager : {lStaff[2]}")
 
 # Get the SHE statuses
 print("\nObtaining and processing SHE records")
@@ -117,6 +117,11 @@ msg.set_content("\n".join(eMailBody[:-2]))
 msg["Subject"] = f"Pulshe report - {today[:10]}"
 msg["From"] = "r.nandakumar@stfc.ac.uk"
 msg["To"] = "r.nandakumar@rl.ac.uk"
+cc = ["joshua.davies@stfc.ac.uk", "andrew.j.smith@stfc.ac.uk", "maurits.van-der-grinten@stfc.ac.uk",
+    "terry.cornford@stfc.ac.uk"]
+answer = input("Send wide? y/n: ")
+if answer == "y":
+    msg["CC"] = ",".join(cc)
 s = smtplib.SMTP("localhost")
 s.send_message(msg)
 s.quit()
