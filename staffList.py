@@ -37,7 +37,7 @@ deptStaff.addDepartment(cdrList, debug=debug)
 os.unlink(cdr_file)  # Clean up
 
 print("Making Department organogram")
-# makeOrganogram(deptStaff)
+makeOrganogram(deptStaff)
 # print(deptStaff.eList)
 # sys.exit()
 
