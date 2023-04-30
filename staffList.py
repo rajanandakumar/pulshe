@@ -37,8 +37,8 @@ deptStaff.addDepartment(cdrList, debug=debug)
 os.unlink(cdr_file)  # Clean up
 
 print("Making Department organogram")
-# leftStaff = makeOrganogram(deptStaff)
-leftStaff = []
+leftStaff = makeOrganogram(deptStaff)
+# leftStaff = []
 # print(deptStaff.eList)
 # sys.exit()
 
@@ -48,11 +48,20 @@ old_stdout = sys.stdout
 sys.stdout = mystdout = io.StringIO()
 
 print("""
-Unidentified name in SHE spreadsheet used means that this name is a PPD staff member in the SHE spreadsheet but is not in PPD according to CDR
+Note : The unique identification used is the STFC email address according to CDR as this
+is (supposed to be) available now in CDR, the SHE spreadsheet and the totara spreadsheet.
 
-addTotaraRecords - Unidentified (missing in CDR?): this means that there is a person in Totara labelled as PPD staff but is not in PPD according to CDR
+First printout (CDR update needs) is of staff who have left but are still in various
+linemanager chains in CDR.
 
-The list at the end: These names are flagged as having outstanding training in the SHE spreadsheet but in Totara we find the training to be completed
+Unidentified name in SHE spreadsheet used means that this name is a PPD staff member in
+the SHE spreadsheet but is not in PPD according to CDR
+
+addTotaraRecords - Unidentified (missing in CDR?): this means that there is a person in
+Totara labelled as PPD staff but is not in PPD according to CDR
+
+The list at the end: These names are flagged as having outstanding training in the SHE
+spreadsheet but in Totara we find the training to be completed
 
 ======================
     """)
@@ -62,7 +71,6 @@ print("\nTime of current run : ", today[:19])
 
 # Organogram stuff
 print(f"CDR update needs:")
-print(f"Staff who have left but are still in various linemanager chains in CDR:")
 for lStaff in leftStaff:
     print(f"{lStaff[0]:35s} {lStaff[1]:35s}  Manager : {lStaff[2]}")
 
