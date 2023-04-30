@@ -24,7 +24,9 @@ def writeOutReports(staff, conf, debug=False):
         # if staff.person[uid]["Building"] == "Remote working" : continue
         # if type(staff.person[uid]["Band"]) != type("abc") : continue
 
-        f.write("""<tr><td style="background-color:white"> %s</td>""" % uid)
+        p = staff.person[uid]
+        pNN = p["Forename"] + " " + p["Surname"]
+        f.write("""<tr><td style="background-color:white"> %s</td>""" % pNN)
         nTot = nTot + 1
         # print(uid, staff.person[uid])
         for tr in conf["she_trainings"]:

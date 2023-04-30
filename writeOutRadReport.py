@@ -41,7 +41,9 @@ def writeOutRadReport(staff, conf, debug=False):
             # Person has had no rad training ever
             continue
         radDue = status[1]
-        f.write("""<tr><td style="background-color:white"> %s</td>""" % uid)
+        p = staff.person[uid]
+        pNN = p["Forename"] + " " + p["Surname"]
+        f.write("""<tr><td style="background-color:white"> %s</td>""" % pNN)
         for tr in conf["rad_trainings"]:
             training = tr[0]
             if radDue[training] == "":
