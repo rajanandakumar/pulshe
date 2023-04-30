@@ -120,7 +120,8 @@ class staffMember:
                 continue
 
             # UID : Same algorithm as in line 14/15, 33/34 above
-            # nName = srv[conf["she_forename"]].strip() + " " + srv[conf["she_lastname"]].strip()
+            nName = srv[conf["she_forename"]].strip() + " " + srv[conf["she_lastname"]].strip()
+            print(nName)
             print(conf["she_email"], srv[conf["she_email"]])
             nName = srv[conf["she_email"]].strip().lower()
             if nName in conf["she_leftDept"]:
