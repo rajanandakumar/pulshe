@@ -60,9 +60,8 @@ config = {
     # People left but still in SHE spreadsheet
     "she_leftDept": [
     ],
-    "she_nameMismatch": {
-        "Thomas Longman": "Tom Longman",
-    },
+    # "she_nameMismatch": {
+    # },
     # People left but still in Totara spreadsheet
     "totara_leftDept": [
     ],
