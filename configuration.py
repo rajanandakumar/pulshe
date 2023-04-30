@@ -23,38 +23,38 @@ config = {
     "AllTraining": "TEST for ALL Mandatory Training",  # The test for all mandatory training
     # Non-mandatory radiation trainings as requested by Jens Dopke, Gary Zhang
     "rad_trainings": [
-        ("Radioactive Materials (RAM)", 81, ""), # CD
-        ("STFC General Radiation Awareness (online)", 84, ""), # CG
-        ("Working with ionising radiation (1 day)", 85, ""), # CH
-        ("Working with ionising radiation (refresher, online)", 86, ""), # CI
-        ("RPS (RAL / DL)", 87, ""), # CJ
+        ("Radioactive Materials (RAM)", 82, ""), # CE
+        ("STFC General Radiation Awareness (online)", 85, ""), # CH
+        ("Working with ionising radiation (1 day)", 86, ""), # CI
+        ("Working with ionising radiation (refresher, online)", 87, ""), # CJ
+        ("RPS (RAL / DL)", 88, ""), # CK
     ],
     # Non-mandatory miscellaneous trainings
     "misc_trainings": [
         ("Cryogenics (SHE Code 3 - SC0302)", 32, ""), # AG
         ("Risk Assessment (SHE Code 6 - SC0601)", 45,""), # AT
         ("STFC SHE Training for Non-Technical Managers (SHE Code 10 - SC1004)", 55,""), # BD
-        ("PAT Testing (SHE Code 17 - SC1701)", 66,""), # BO
+        ("PAT Testing (SHE Code 17 - SC1701)", 67,""), # BP
 
-        ("Building Warden (SHE Code 32 - SC3201)", 92,""), # CO
-        ("Building Warden (Refresher) (SHE Code 32 - SC3202)", 93,""), # CP
+        ("Building Warden (SHE Code 32 - SC3201)", 93,""), # CP
+        ("Building Warden (Refresher) (SHE Code 32 - SC3202)", 94,""), # CQ
 
-        ("Gas Cylinder Safety Awareness (SHE Code 33 - SC3301)", 98,""), # CU
+        ("Gas Cylinder Safety Awareness (SHE Code 33 - SC3301)", 99,""), # CV
 
-        ("First Aid at Work (Initial) (SHE Code 36)", 105,""), # DB
-        ("First Aid at Work Refresher (Requalification) (SHE Code 36)", 106,""), # DC
-        ("Annual Skills/Defib Refresher (SHE Code 36)", 107,""), # DD
+        ("First Aid at Work (Initial) (SHE Code 36)", 106,""), # DC
+        ("First Aid at Work Refresher (Requalification) (SHE Code 36)", 107,""), # DD
+        ("Annual Skills/Defib Refresher (SHE Code 36)", 108,""), # DE
     ],
     # Non-mandatory chemical safety training
     "coshh_trainings":[
-        ("Basic COSHH Awareness (on-line) (SHE Code 37 - SC3701)", 109,""), # DF
-        ("COSHH Assessor (SHE Code 37 - SC3702)", 110,""), # DG
+        ("Basic COSHH Awareness (on-line) (SHE Code 37 - SC3701)", 110,""), # DG
+        ("COSHH Assessor (SHE Code 37 - SC3702)", 111,""), # DH
     ],
     # Non-mandatory laser safety training
     "laser_trainings":[
-        ("Laser Safety Hazard Awareness (SHE Code 22 - SC2202)", 68,""), # BQ
-        ("Laser Responsible / Safety Officer (OLRO/LRO/LSO) (SHE Code 22 - SC2203)", 69,""), # BR
-        ("Laser Nominated Person (LNP) Briefing (SHE Code 22)", 70,""), # BS
+        ("Laser Safety Hazard Awareness (SHE Code 22 - SC2202)", 69,""), # BR
+        ("Laser Responsible / Safety Officer (OLRO/LRO/LSO) (SHE Code 22 - SC2203)", 70,""), # BS
+        ("Laser Nominated Person (LNP) Briefing (SHE Code 22)", 71,""), # BT
     ],
     # People left but still in SHE spreadsheet
     "she_leftDept": [
