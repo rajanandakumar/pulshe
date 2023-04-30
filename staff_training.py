@@ -23,8 +23,7 @@ class staffMember:
         self.Totara_spreadsheet_date = ""
 
     def addPerson(self, person):
-        eMail = person["Email"].lower()
-        nName = eMail
+        eMail = person["Email"]
         # nName = person["Forename"] + " " + person["Surname"]
         # # Specific exception
         # if person["Surname"] == "Buttinger":
@@ -39,6 +38,7 @@ class staffMember:
         if type(eMail) != type(""):
             return -1  # Critical error. Do not add this person.
         eMail = eMail.lower()  # It is a string
+        nName = eMail
         person["Email"] = person["Email"].lower()
         if len(eMail) < 5:
             return -2  # Critical error. Do not add this person.
