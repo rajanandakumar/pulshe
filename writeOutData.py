@@ -48,7 +48,7 @@ def writeOutTrainings(staff, conf, debug=False):
         pathlib.Path(outSubdir).mkdir(exist_ok=True)  # Hope it does not crash?
 
         f = open(fname, "w")
-        writeOutHeader(f, uid, totara_sheet_date)
+        writeOutHeader(f, uid, staff.person[uid], totara_sheet_date)
         nOKTrs = writeOutTraining(f, conf, uid, staff.trainings_status[uid], staff.trainings_dueDate[uid])
         writeOutFooter(f)
 
@@ -181,12 +181,11 @@ def writeOutTraining(hOut, conf, uid, training_status, tr_dueDate):
     return nOKTrainings
 
 
-def writeOutHeader(hOut, uid, totara_date, non_mand=False):
+def writeOutHeader(hOut, uid, person, totara_date, non_mand=False):
     if non_mand:
         hOut.write(f"<HEAD>\n  <TITLE>PPD non mandatory trainings record for {uid}</TITLE>")
     else:
-        p = self.person[uid]
-        pNN = p["Forename"] + " " + p["Surname"]
+        pNN = person["Forename"] + " " + person["Surname"]
         hOut.write(f"<HEAD>\n  <TITLE>PPD SHE trainings record for {pNN}</TITLE>")
     hOut.write(
         """
