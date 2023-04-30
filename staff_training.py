@@ -121,6 +121,7 @@ class staffMember:
 
             # UID : Same algorithm as in line 14/15, 33/34 above
             # nName = srv[conf["she_forename"]].strip() + " " + srv[conf["she_lastname"]].strip()
+            print(conf["she_email"], srv[conf["she_email"]].strip().lower())
             nName = srv[conf["she_email"]].strip().lower()
             if nName in conf["she_leftDept"]:
                 print(f"Still encountering {nName} ... (left?)")
