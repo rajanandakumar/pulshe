@@ -38,6 +38,7 @@ os.unlink(cdr_file)  # Clean up
 
 print("Making Department organogram")
 # leftStaff = makeOrganogram(deptStaff)
+leftStaff = []
 # print(deptStaff.eList)
 # sys.exit()
 
