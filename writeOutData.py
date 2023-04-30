@@ -182,10 +182,10 @@ def writeOutTraining(hOut, conf, uid, training_status, tr_dueDate):
 
 
 def writeOutHeader(hOut, uid, person, totara_date, non_mand=False):
+    pNN = person["Forename"] + " " + person["Surname"]
     if non_mand:
-        hOut.write(f"<HEAD>\n  <TITLE>PPD non mandatory trainings record for {uid}</TITLE>")
+        hOut.write(f"<HEAD>\n  <TITLE>PPD non mandatory trainings record for {pNN}</TITLE>")
     else:
-        pNN = person["Forename"] + " " + person["Surname"]
         hOut.write(f"<HEAD>\n  <TITLE>PPD SHE trainings record for {pNN}</TITLE>")
     hOut.write(
         """
@@ -214,12 +214,11 @@ def writeOutHeader(hOut, uid, person, totara_date, non_mand=False):
 """
     )
     if non_mand:
-        hOut.write("""<p style="font-size:25px">Non-Mandatory training status for %s </p>""" % uid)
+        hOut.write("""<p style="font-size:25px">Non-Mandatory training status for %s </p>""" % pNN)
     else:
-        hOut.write("""<p style="font-size:25px">Mandatory training status for %s </p>""" % uid)
+        hOut.write("""<p style="font-size:25px">Mandatory training status for %s </p>""" % pNN)
         hOut.write("""<p style="font-size:20px">Report preparation date: %s </p>\n""" % str(totara_date)[:10])
     hOut.write("\n")
-
 
 def writeOutFooter(hOut, non_mand=False):
     hOut.write("\n<p>\n")
