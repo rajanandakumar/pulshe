@@ -1,7 +1,7 @@
 config = {
     "department": "PPD",  # Capitalisation matters
     # SHE spreadsheet columns we are interested in to select and identify staff
-    "she_filename": "SHETrainingRecords-09Mar2023.xlsm",
+    "she_filename": "SHETrainingRecords-21Apr2023.xlsm",
     "she_numColumns": 110,  # Minimum number of visible columns to be a valid row
     "she_forename": 4,
     "she_lastname": 3,
