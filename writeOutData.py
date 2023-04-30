@@ -185,7 +185,9 @@ def writeOutHeader(hOut, uid, totara_date, non_mand=False):
     if non_mand:
         hOut.write(f"<HEAD>\n  <TITLE>PPD non mandatory trainings record for {uid}</TITLE>")
     else:
-        hOut.write(f"<HEAD>\n  <TITLE>PPD SHE trainings record for {uid}</TITLE>")
+        p = self.person[uid]
+        pNN = p["Forename"] + " " + p["Surname"]
+        hOut.write(f"<HEAD>\n  <TITLE>PPD SHE trainings record for {pNN}</TITLE>")
     hOut.write(
         """
     <style type="text/css">
