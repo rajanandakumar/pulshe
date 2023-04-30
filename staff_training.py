@@ -123,7 +123,7 @@ class staffMember:
             nName = srv[conf["she_forename"]].strip() + " " + srv[conf["she_lastname"]].strip()
             print(nName)
             print(conf["she_email"], srv[conf["she_email"]])
-            nName = srv[conf["she_email"]].strip().lower()
+            nName = srv[conf["she_email"]]
             if nName in conf["she_leftDept"]:
                 print(f"Still encountering {nName} ... (left?)")
                 continue
