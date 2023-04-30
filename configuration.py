@@ -7,6 +7,7 @@ config = {
     "she_lastname": 3,
     "she_department": 9,
     "she_type": 1,
+    "she_email": 12,
     "she_status": 0,  # Want only "Live" people
     # SHE trainings
     "she_trainings": [
@@ -58,19 +59,11 @@ config = {
     ],
     # People left but still in SHE spreadsheet
     "she_leftDept": [
-        "Josephine Jones",
-        "Asher Kaboth",  # To be removed in 2021
-        "Divyatharsshni Sekar",  # yini  left in July 2022
     ],
     "she_nameMismatch": {
-        "Atanu Modal": "Atanu Modak",
-        "Sandeep Rao Gopalam": "Sandeep Gopalam",
-        "Nicholas Jones": "Nicholas Cleverly-Jones",
-        "Calum Cox": "Callum Cox",
         "Thomas Longman": "Tom Longman",
     },
     # People left but still in Totara spreadsheet
     "totara_leftDept": [
-        "Alfons Weber",  # Has left for Germany in 2021
     ],
 }

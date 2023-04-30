@@ -23,17 +23,18 @@ class staffMember:
         self.Totara_spreadsheet_date = ""
 
     def addPerson(self, person):
-        eMail = person["Email"]
-        nName = person["Forename"] + " " + person["Surname"]
-        # Specific exception
-        if person["Surname"] == "Buttinger":
-            nName = "Will Buttinger"
-        if person["Surname"] == "Rao Gopalam":
-            nName = "Sandeep Gopalam"
-        if person["Surname"] == "Richards" and person["Forename"] == "Kate":
-            nName = "Katherine (Kate) Richards"
-        if person["Surname"] == "Whalen" and person["Forename"] == "Kate":
-            nName = "Kathleen (Kate) Whalen"
+        eMail = person["Email"].lower()
+        nName = eMail
+        # nName = person["Forename"] + " " + person["Surname"]
+        # # Specific exception
+        # if person["Surname"] == "Buttinger":
+        #     nName = "Will Buttinger"
+        # if person["Surname"] == "Rao Gopalam":
+        #     nName = "Sandeep Gopalam"
+        # if person["Surname"] == "Richards" and person["Forename"] == "Kate":
+        #     nName = "Katherine (Kate) Richards"
+        # if person["Surname"] == "Whalen" and person["Forename"] == "Kate":
+        #     nName = "Kathleen (Kate) Whalen"
         #
         if type(eMail) != type(""):
             return -1  # Critical error. Do not add this person.
@@ -46,8 +47,8 @@ class staffMember:
             return -3
         self.eList.append(eMail)
         # The Unique Identifier of the person - eMail is not stored in the spreadsheets.
-        # UID = eMail
-        UID = nName
+        UID = eMail
+        # UID = nName
         # person["federalID"] = "rn37"
         self.person[UID] = person
         self.person[UID]["Location"] = "Unknown"
@@ -119,14 +120,15 @@ class staffMember:
                 continue
 
             # UID : Same algorithm as in line 14/15, 33/34 above
-            nName = srv[conf["she_forename"]].strip() + " " + srv[conf["she_lastname"]].strip()
+            # nName = srv[conf["she_forename"]].strip() + " " + srv[conf["she_lastname"]].strip()
+            nName = srv[conf["she_email"]].strip().lower()
             if nName in conf["she_leftDept"]:
                 print(f"Still encountering {nName} ... (left?)")
                 continue
-            if nName in conf["she_nameMismatch"].keys():
-                cName = conf["she_nameMismatch"][nName]
-                print(f"Still encountering wrong name - {nName}. Should be {cName}")
-                nName = cName
+            # if nName in conf["she_nameMismatch"].keys():
+            #     cName = conf["she_nameMismatch"][nName]
+            #     print(f"Still encountering wrong name - {nName}. Should be {cName}")
+            #     nName = cName
             if nName not in self.nList:
                 messages_leftPPD.append(f"addSHERecords - Unidentified name (left?) :{nName}")
                 continue
@@ -191,19 +193,20 @@ class staffMember:
             if conf["department"] not in trd["User's Fullname"] and conf["department"] != trd["Department"]:
                 continue
 
-            nName = trd["User First Name"] + " " + trd["User Last Name"]
-            if nName in conf["totara_leftDept"]:  # Has left for Germany
+            nName = trd["Username"].strip().lower()
+            # nName = trd["User First Name"] + " " + trd["User Last Name"]
+            if nName in conf["totara_leftDept"]:
                 continue
-            if nName == "Kate Richards":
-                nName = "Katherine (Kate) Richards"
-            if nName == "Sandeep Rao Gopalam":
-                nName = "Sandeep Gopalam"
-            if nName == "William Buttinger":
-                nName = "Will Buttinger"
-            if nName == "Kate Whalen":
-                nName = "Kathleen (Kate) Whalen"
-            if nName == "Nicholas Jones":
-                nName = "Nicholas Cleverly-Jones"
+            # if nName == "Kate Richards":
+            #     nName = "Katherine (Kate) Richards"
+            # if nName == "Sandeep Rao Gopalam":
+            #     nName = "Sandeep Gopalam"
+            # if nName == "William Buttinger":
+            #     nName = "Will Buttinger"
+            # if nName == "Kate Whalen":
+            #     nName = "Kathleen (Kate) Whalen"
+            # if nName == "Nicholas Jones":
+            #     nName = "Nicholas Cleverly-Jones"
             if nName not in self.nList:
                 messages_missCDR.append(f"addTotaraRecords - Unidentified (missing in CDR?) :{nName}")
                 continue
