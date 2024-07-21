@@ -3,9 +3,12 @@ from dateutil.relativedelta import relativedelta
 from dateutil.parser import parse
 import pandas as pd
 import uuid
-def writeOutReports(staff, conf, debug=False):
+def writeOutReports(staff, conf, workType="Unknown", debug=False):
     outDir = "training"
-    fileName = outDir + "/ppd-0t-" + str(uuid.uuid4()) + ".html"
+    if workType == "staff":
+        fileName = outDir + "/ppd-0t-" + str(uuid.uuid4()) + ".html"
+    else:
+        fileName = outDir + "/ppd-3t-" + str(uuid.uuid4()) + ".html"
     totara_sheet_date = staff.Totara_spreadsheet_date
     f = open(fileName, "w")
     writeOutReportHeader(f, conf, totara_sheet_date)
@@ -19,8 +22,19 @@ def writeOutReports(staff, conf, debug=False):
     if debug:
         print("\nRecords updated from Totara ...")
         print(f"Name                 Training               DateOfCompletion")
+    work_type = ["staff", "fixed term", "agency"]
     for uid in staff.nList:
-        if staff.person[uid]["Location"] != "RAL filtered" : continue
+        if workType == "staff":
+            if not staff.person[uid]["work_type"] in work_type:
+                continue
+        else:
+            if staff.person[uid]["work_type"] in work_type:
+                continue
+        # print("Before filter ...", uid, staff.person[uid])
+        if conf["optionalTrainings"]:
+            if staff.person[uid]["Location"] != "RAL filtered" : continue
+        else:
+            if staff.person[uid]["Location"] != "RAL" : continue
         # if staff.person[uid]["Building"] == "Remote working" : continue
         # if type(staff.person[uid]["Band"]) != type("abc") : continue
 
@@ -36,7 +50,7 @@ def writeOutReports(staff, conf, debug=False):
                 staff.trainings_dueDate[uid][training][0]))
             if staff.trainings_dueDate[uid][training][1] == "#99ee99":
                 nUpToDate[training] = nUpToDate[training] + 1
-            if staff.trainings_status[uid][training][2] == "Totara":
+            if training in staff.trainings_status[uid].keys() and staff.trainings_status[uid][training][2] == "Totara":
                 if debug:
                     print(f"{uid:20s} {training:25s} {str(staff.trainings_status[uid][training][1])[:10]}")
             # print(staff.trainings_status[uid][training][2])
@@ -44,6 +58,10 @@ def writeOutReports(staff, conf, debug=False):
         f.write("</tr>\n")
     writeOutReportFooter(f)
     f.close()
+
+    # The stats page only for staff. Not visitors / students
+    if workType != "staff":
+        return
 
     # The stats page
     fileName = outDir + "/ppd-1t-" + str(uuid.uuid4()) + ".html"

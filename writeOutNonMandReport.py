@@ -19,14 +19,18 @@ def okayToWrite(conf, uid, report, staff):
     elif report == "rad_trainings":
         radTr = staff.rad_training_status[uid]
 
+    # print(f"{report} ... {uid} ... {radTr}")
     for tr in conf[report]:
         training = tr[0]
         dTrn = radTr[training]
         rad_due[training] = dTrn
-        if type(dTrn) == type("a"):
+        if isinstance(dTrn, type(())):
+            dDue = dTrn[1] + relativedelta(years=+5)
+        elif isinstance(dTrn, type(datetime.datetime(1,1,1))):
+            dDue = dTrn + relativedelta(years=+5)
+        else: # This training has not been done
             continue
         oStatus = True
-        dDue = dTrn + relativedelta(years=+5)
         dNow = datetime.datetime.now()
         colour = "#f6566b"
         if dDue > dNow:
@@ -95,11 +99,11 @@ def writeOutNonMandReport(staff, conf, report, debug=False):
     outDir = "training"
     file_ral = outDir + "/ppd-ral-" + report + "-" + str(uuid.uuid4()) + ".html"
     file_boulby = outDir + "/ppd-boulby-" + report + "-" + str(uuid.uuid4()) + ".html"
-    SHE_sheet_date = staff.SHE_spreadsheet_date
+    sheet_date = staff.Totara_spreadsheet_date
     f_ral = open(file_ral, "w")
     f_boulby = open(file_boulby, "w")
-    writeOutNonMandReportHeader(f_ral, conf, SHE_sheet_date, report)
-    writeOutNonMandReportHeader(f_boulby, conf, SHE_sheet_date, report)
+    writeOutNonMandReportHeader(f_ral, conf, sheet_date, report)
+    writeOutNonMandReportHeader(f_boulby, conf, sheet_date, report)
 
     for uid in staff.nList:
         if staff.person[uid]["Location"] != "RAL filtered":

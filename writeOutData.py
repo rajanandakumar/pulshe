@@ -23,12 +23,18 @@ def okayToWrite(conf, uid, staff):
 
         for tr in conf[report]:
             training = tr[0]
+            if training not in radTr.keys():
+                continue
             dTrn = radTr[training]
             rad_due[training] = dTrn
-            if type(dTrn) == type("a"):
+
+            if isinstance(dTrn, type(())):
+                dDue = dTrn[1] + relativedelta(years=+5)
+            elif isinstance(dTrn, type(datetime.datetime(1,1,1))):
+                dDue = dTrn + relativedelta(years=+5)
+            else: # This training has not been done
                 continue
             oStatus = True
-            dDue = dTrn + relativedelta(years=+5)
             dNow = datetime.datetime.now()
             colour = "#f6566b"
             if dDue > dNow:
@@ -46,16 +52,17 @@ def writeOutTrainings(staff, conf, debug=False):
         fname = outSubdir + "/" + ff
 
         pathlib.Path(outSubdir).mkdir(exist_ok=True)  # Hope it does not crash?
-
+        # print(f"Writing information for ... {fname}")
         f = open(fname, "w")
         writeOutHeader(f, uid, staff.person[uid], totara_sheet_date)
         nOKTrs = writeOutTraining(f, conf, uid, staff.trainings_status[uid], staff.trainings_dueDate[uid])
         writeOutFooter(f)
 
         # Write out the miscellaneous trainings if they exist
-        status = okayToWrite(conf, uid, staff)
-        if status[0]:
-            writeOutNonMandTraining(f, conf, status[1])
+        if conf["optionalTrainings"]:
+            status = okayToWrite(conf, uid, staff)
+            if status[0]:
+                writeOutNonMandTraining(f, conf, status[1])
         writeOutFooter(f, non_mand=True)
         f.close()
 
@@ -86,7 +93,14 @@ def writeOutNonMandTraining(hOut, conf, training_status):
             status = "Expired"
             if col == '#99ee99':
                 status = "OK"
-            hOut.write(f"<tr><td> {k} </td> <td  style='background-color:{col}'> {status} </td> <td> {dat} </td>")
+            xURL = ""
+            for tr in conf["misc_trainings"]:
+                if k == tr[0]:
+                    xURL = tr[2]
+            if len(xURL) > 2:
+                hOut.write(f"<tr><td> <a href={xURL}>{k}</a> </td> <td  style='background-color:{col}'> {status} </td> <td> {dat} </td>")
+            else:
+                hOut.write(f"<tr><td> {k} </td> <td  style='background-color:{col}'> {status} </td> <td> {dat} </td>")
     hOut.write("</table>")
 
 
@@ -130,6 +144,8 @@ def writeOutTraining(hOut, conf, uid, training_status, tr_dueDate):
         s_date = statList[1]
         if isinstance(s_date, type(pd.NaT)):
             s_date = -1.0
+        if s_date == "":
+            s_date = "0/0/0"
 
         # The date of the training and its manipulations
         dDue = "Unknown"
@@ -151,6 +167,7 @@ def writeOutTraining(hOut, conf, uid, training_status, tr_dueDate):
                         # Training was only from Totara information
                         # print("Error in status from SHE table - reset colour.", uid, training)
                         col = "#f6566b"
+                        status = "Out of date"
         if s_date == "0/0/0":  # Training not done / recorded
             col_date = "#ffa500"
 
@@ -162,7 +179,8 @@ def writeOutTraining(hOut, conf, uid, training_status, tr_dueDate):
             hOut.write("""<td style="background-color:%s"> %s</td>""" % (col_date, str(s_date)[:10]))
 
         #  Date training is due
-        if training.startswith("Asbestos") or training.startswith("Electrical") or "BiteSize" in training:
+        # if training.startswith("Asbestos") or training.startswith("Electrical") or "BiteSize" in training:
+        if training in conf["always_valid_trainings"]:
             if str(s_date)[:2] == "20":  # Has been done this century
                 hOut.write("""<td style="background-color:%s"> %s</td>""" % (col_date, "Does not expire"))
                 tr_dueDate[training] = [str(s_date)[:10], col_date, "OK"]

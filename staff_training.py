@@ -1,9 +1,9 @@
 import pandas as pd
 from dateutil.parser import parse
-
+import math
 
 class staffMember:
-    def __init__(self, department="PPD"):
+    def __init__(self, conf, department="PPD"):
         self.nStaff = 0
         self.department = department
         self.person = {}  # The identifying details of the person
@@ -21,6 +21,26 @@ class staffMember:
         self.nList = []  # This is the list of all the Unique IDs (UID) as defined in addPerson
         self.SHE_spreadsheet_date = ""
         self.Totara_spreadsheet_date = ""
+
+        # Just the courses in a listing
+        self.optional_courses = []
+        self.misc_courses = []
+        self.rad_courses = []
+        self.coshh_courses = []
+        self.laser_courses = []
+        for item in conf["misc_trainings"]:
+            self.optional_courses.append(item[0])
+            self.misc_courses.append(item[0])
+        for item in conf["rad_trainings"]:
+            self.optional_courses.append(item[0])
+            self.rad_courses.append(item[0])
+        for item in conf["coshh_trainings"]:
+            self.optional_courses.append(item[0])
+            self.coshh_courses.append(item[0])
+        for item in conf["laser_trainings"]:
+            self.optional_courses.append(item[0])
+            self.laser_courses.append(item[0])
+
 
     def addPerson(self, person):
         eMail = person["Email"]
@@ -52,6 +72,7 @@ class staffMember:
         # person["federalID"] = "rn37"
         self.person[UID] = person
         self.person[UID]["Location"] = "Unknown"
+        self.person[UID]["work_type"] = "Unknown"
         self.trainings_status[UID] = {}
         self.trainings_dueDate[UID] = {}
         self.rad_training_status[UID] = {}
@@ -73,6 +94,15 @@ class staffMember:
                 self.person[i]["Surname"],
                 self.person[i]["Email"],
             )
+
+    def getRDate(self, rTr="", srv=""):
+        rDate = ""
+        if type(srv) == type(0.0) and math.isnan(srv):
+            return rDate
+        if rTr >= 0 and srv != None and srv != "NR":
+            rDate = parse(str(srv))
+        return rDate
+
 
     def addDepartment(self, cdrList, debug=False):
         for index, bx in cdrList.iterrows():
@@ -110,19 +140,27 @@ class staffMember:
                 continue
             if srv[conf["she_status"]] != "Live":
                 continue
-            # if srv[conf["she_type"]] not in {"Staff", "Fixed Term", "Agency"} : continue  # Bug?
-            # if srv[conf["she_type"]] not in ["Staff", "Fixed Term", "Agency"] : continue
-            if srv[conf["she_type"]].strip().lower() not in [
-                "staff",
-                "fixed term",
-                "agency",
-            ]:
-                continue
 
             # UID : Same algorithm as in line 14/15, 33/34 above
             # nName = srv[conf["she_forename"]].strip() + " " + srv[conf["she_lastname"]].strip()
+            if isinstance(srv[conf["she_email"]], type("")):
+                nName = srv[conf["she_email"]].strip().lower()
+            else:
+                # print("Ignoring person with no email ID: ",srv[conf["she_forename"]].strip() + " " + srv[conf["she_lastname"]].strip())
+                continue
+
+            # if srv[conf["she_type"]] not in {"Staff", "Fixed Term", "Agency"} : continue  # Bug?
+            # if srv[conf["she_type"]] not in ["Staff", "Fixed Term", "Agency"] : continue
+            # if srv[conf["she_type"]].strip().lower() not in [
+            #     "staff",
+            #     "fixed term",
+            #     "agency",
+            # ]:
+            #     print("email:", srv[conf["she_email"]], " type:", srv[conf["she_type"]].strip())
+            #     continue
+
             # print(conf["she_email"], srv[conf["she_email"]])
-            if type(srv[conf["she_email"]]) == type(""):
+            if isinstance(srv[conf["she_email"]], type("")):
                 nName = srv[conf["she_email"]].strip().lower()
             else:
                 print("Ignoring person with no email ID: ",srv[conf["she_forename"]].strip() + " " + srv[conf["she_lastname"]].strip())
@@ -130,14 +168,11 @@ class staffMember:
             if nName in conf["she_leftDept"]:
                 print(f"Still encountering {nName} ... (left?)")
                 continue
-            # if nName in conf["she_nameMismatch"].keys():
-            #     cName = conf["she_nameMismatch"][nName]
-            #     print(f"Still encountering wrong name - {nName}. Should be {cName}")
-            #     nName = cName
             if nName not in self.nList:
                 messages_leftPPD.append(f"addSHERecords - Unidentified name (left?) :{nName}")
                 continue
             self.person[nName]["Location"] = "RAL filtered"
+            self.person[nName]["work_type"] = srv[conf["she_type"]].strip().lower()
 
             # Add in the training records
             for tr in trs:
@@ -148,31 +183,30 @@ class staffMember:
                         "SHE",
                     )
                 else:
-                    self.updateTraining(nName, tr[0], srv[tr[1][0]], srv[tr[1][1]], "SHE")
-                    if tr[0].startswith("Man Hand"):
-                        self.updateTraining(nName, tr[0], srv[tr[1][0]], srv[tr[1][2]], "SHE")
+                    if isinstance(tr[1], type(())):
+                        if len(tr[1]) == 1: # Is this mandatory?
+                            self.updateTraining(nName, tr[0], srv[tr[1][0]], "0/0/0", "SHE")
+                        else: # Standard mandatory training
+                            self.updateTraining(nName, tr[0], srv[tr[1][0]], srv[tr[1][1]], "SHE")
+                            if tr[0].startswith("Man Hand"):
+                                self.updateTraining(nName, tr[0], srv[tr[1][0]], srv[tr[1][2]], "SHE")
+                    else: # Information only in Totara
+                        self.updateTraining(nName, tr[0], "0/0/0", "", "SHE")
 
-            # Right now only available in the SHE spreadsheet. Don't bother to check Totara
-            for rTr in conf["rad_trainings"]:
-                rDate = ""
-                if srv[rTr[1]] != None and srv[rTr[1]] != "NR":
-                    rDate = parse(str(srv[rTr[1]]))
-                self.rad_training_status[nName][rTr[0]] = rDate
-            for rTr in conf["coshh_trainings"]:
-                rDate = ""
-                if srv[rTr[1]] != None and srv[rTr[1]] != "NR":
-                    rDate = parse(str(srv[rTr[1]]))
-                self.coshh_training_status[nName][rTr[0]] = rDate
-            for rTr in conf["laser_trainings"]:
-                rDate = ""
-                if srv[rTr[1]] != None and srv[rTr[1]] != "NR":
-                    rDate = parse(str(srv[rTr[1]]))
-                self.laser_training_status[nName][rTr[0]] = rDate
-            for rTr in conf["misc_trainings"]:
-                rDate = ""
-                if srv[rTr[1]] != None and srv[rTr[1]] != "NR":
-                    rDate = parse(str(srv[rTr[1]]))
-                self.misc_training_status[nName][rTr[0]] = rDate
+            # Do only if requested in the configuration
+            if conf["optionalTrainings"]:
+                for rTr in conf["rad_trainings"]:
+                    rDate = self.getRDate(rTr[1], srv[rTr[1]])
+                    self.rad_training_status[nName][rTr[0]] = rDate
+                for rTr in conf["coshh_trainings"]:
+                    rDate = self.getRDate(rTr[1], srv[rTr[1]])
+                    self.coshh_training_status[nName][rTr[0]] = rDate
+                for rTr in conf["laser_trainings"]:
+                    rDate = self.getRDate(rTr[1], srv[rTr[1]])
+                    self.laser_training_status[nName][rTr[0]] = rDate
+                for rTr in conf["misc_trainings"]:
+                    rDate = self.getRDate(rTr[1], srv[rTr[1]])
+                    self.misc_training_status[nName][rTr[0]] = rDate
         uniq_leftPPD = set(messages_leftPPD)
         leftPPD = list(uniq_leftPPD)
         for mess in leftPPD:
@@ -187,6 +221,7 @@ class staffMember:
         # totaraRecords.columns = new_header
         kount = 0
         messages_missCDR = []
+
         for index, tR in totaraRecords.iterrows():
             kount = kount + 1
             trd = tR.to_dict()  # This works because apparently Totara records have a decent first row
@@ -195,6 +230,9 @@ class staffMember:
             # Hopefully this takes care of ensuring that the person is in the department
             if trd["Active/Deleted"] == "Deleted":
                 continue
+            if type(trd["Department"]) != type(" "): # Department is not filled for this user
+                # print(trd["User's Fullname"], trd["Department"])
+                continue
             if conf["department"] not in trd["User's Fullname"] and conf["department"] != trd["Department"]:
                 continue
 
@@ -202,16 +240,6 @@ class staffMember:
             # nName = trd["User First Name"] + " " + trd["User Last Name"]
             if nName in conf["totara_leftDept"]:
                 continue
-            # if nName == "Kate Richards":
-            #     nName = "Katherine (Kate) Richards"
-            # if nName == "Sandeep Rao Gopalam":
-            #     nName = "Sandeep Gopalam"
-            # if nName == "William Buttinger":
-            #     nName = "Will Buttinger"
-            # if nName == "Kate Whalen":
-            #     nName = "Kathleen (Kate) Whalen"
-            # if nName == "Nicholas Jones":
-            #     nName = "Nicholas Cleverly-Jones"
             if nName not in self.nList:
                 messages_missCDR.append(f"addTotaraRecords - Unidentified (missing in CDR?) :{nName}")
                 continue
@@ -226,43 +254,35 @@ class staffMember:
 
             # Some clean up of the course names
             course = trd["Course Name"]
-            # if course not in c2:
-            #     c2.append(course)
+            # print(course)
             if course.lower().startswith("sc") or course.startswith("Restored"):
                 course = course.split("-")[1].strip()
             if "BiteSize SHE for " in course:
                 course = course.split("BiteSize SHE for")[-1].strip()
 
-            okay = False
             if course == "Asbestos Essentials":
                 trg = course
-                okay = True
             elif course == "Manual Handling":
                 trg = "Man Hand test"
-                okay = True
             elif course == "STFC Fire Safety Training":
                 trg = "Fire test"
-                okay = True
             elif course == "RAL SHE Induction (Refresher)":
                 trg = "Induction Refresher test"
-                okay = True
             elif course == "Display screen Equipment":
                 trg = "DSE training test"
-                okay = True
             elif course == "Electrical Safety Essentials":
                 trg = "Electrical Safety Essentials"
-                okay = True
             elif course == "STFC Health and Safety Arrangements BiteSize":
                 trg = "STFC H&S BiteSize"
-                okay = True
-            if okay:
-                self.updateTraining(
-                    nName,
-                    trg,
-                    trd["Completion Status"],
-                    trd["The completion date"],
-                    "Totara",
-                )
+            elif course.startswith("Workstation Risk Assessment"):
+                trg = "DSE self assessment test"
+            else: # Course name is same as in Totara systems
+                trg = trd["Course Name"]
+            self.updateTraining(nName, trg, trd["Completion Status"], trd["The completion date"], "Totara")
+
+            course = trd["Course Name"]
+            if conf["optionalTrainings"] and course in self.optional_courses:
+                self.updateTraining_misc(conf, nName, course, trd["Completion Status"], trd["The completion date"], "Totara")
         uniq_missCDR = set(messages_missCDR)
         missCDR = list(uniq_missCDR)
         for mess in missCDR:
@@ -281,6 +301,23 @@ class staffMember:
                     continue
                 if self.trainings_status[uid][training][2] == "Totara":
                     print(f"{uid:20s} {training:25s} {str(self.trainings_status[uid][training][1])[:10]}")
+
+    def updateTraining_misc(self, conf, uid, training, stat, date, info):
+        if stat == "Not yet started":
+            return # Do not update the information from the SHE table
+        dnew = parse(str(date))
+        if training in self.misc_courses:
+            self.misc_training_status[uid][training] = (stat, dnew, info)
+        elif training in self.laser_courses:
+            self.laser_training_status[uid][training] = (stat, dnew, info)
+        elif training in self.rad_courses:
+            self.rad_training_status[uid][training] = (stat, dnew, info)
+        elif training in self.coshh_courses:
+            self.coshh_training_status[uid][training] = (stat, dnew, info)
+        else:
+            print(f"Unknown source of training {training} : No update")
+        return
+
 
     def updateTraining(self, uid, training, stat, date, info):
         if stat == "Not yet started":

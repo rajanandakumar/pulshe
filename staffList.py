@@ -11,6 +11,8 @@ from get_files import get_cdr_file, get_she_file, get_totara_file
 
 debug = False
 # debug = True
+sendEmail = True
+# sendEmail = False
 
 # First initialise the staff trainings class
 cFile = sys.argv[1]
@@ -21,8 +23,9 @@ configuration = __import__(cFile)
 if debug:
     print("Configuration used : ", configuration.config)
 department = configuration.config["department"]
-deptStaff = st.staffMember(department)
-# deptStaff = st.staffMember("PPD")
+deptStaff = st.staffMember(configuration.config, department=department)
+if not configuration.config["optionalTrainings"]:
+    sendEmail = False
 
 # Get the list of members of the department.
 print("Contacting CDR for staff list information")
@@ -37,15 +40,18 @@ deptStaff.addDepartment(cdrList, debug=debug)
 os.unlink(cdr_file)  # Clean up
 
 print("Making Department organogram")
-leftStaff = makeOrganogram(deptStaff)
-# leftStaff = []
+if sendEmail:
+    leftStaff = makeOrganogram(deptStaff)
+else:
+    leftStaff = []
 # print(deptStaff.eList)
 # sys.exit()
 
 # Capture the stdout to send as email. Also see
 # https://stackoverflow.com/a/1218951
-old_stdout = sys.stdout
-sys.stdout = mystdout = io.StringIO()
+if sendEmail:
+    old_stdout = sys.stdout
+    sys.stdout = mystdout = io.StringIO()
 
 print("""
 Note : The unique identification used is the STFC email address according to CDR as this
@@ -76,16 +82,13 @@ for lStaff in leftStaff:
 
 # Get the SHE statuses
 print("\nObtaining and processing SHE records")
-# she_file = "SHETrainingRecords-31Oct2022.xlsm"
 she_file = configuration.config["she_filename"]
 print("SHE spreadsheet used : ", she_file)
 status, she_time = get_she_file(loc=she_file, department=department, debug=debug)
 if not status:
     print("Exiting")
     sys.exit(-2)
-# she_table = pd.read_excel(she_file, engine="openpyxl", sheet_name="Summary")
 she_table = pd.read_excel(she_file, engine="openpyxl", sheet_name="Master Data")
-# she_table = pd.read_excel(she_file, engine="openpyxl", sheet_name="Sheet1")
 deptStaff.addSHERecords(she_table, configuration.config, fileTime=she_time, debug=debug)
 os.unlink(she_file)  # Clean up
 
@@ -98,7 +101,8 @@ if not status:
     sys.exit(-2)
 if totara_file.endswith("csv"):
     dtypes = {"The completion date": "str"}
-    parse_dates = ["The completion date"]
+    # parse_dates = ["The completion date"]
+    parse_dates = True
     totara_table = pd.read_csv(totara_file, dtype=dtypes, parse_dates=parse_dates)
     # print(totara_table.info())
 else:
@@ -110,39 +114,46 @@ os.unlink(totara_file)  # Clean up
 deptStaff.printTotaraUpates(configuration.config)
 print("All Okay")
 
-sys.stdout = old_stdout
-eMailBody = mystdout.getvalue().split("\n")
-if eMailBody[-2] != "All Okay":
-    print(eMailBody)
-    print(eMailBody[-2])
-    print("Something went wrong")
-    sys.exit(-3)
-# Send email following https://docs.python.org/3/library/email.examples.html
-import smtplib
-from email.message import EmailMessage
+if sendEmail:
+    sys.stdout = old_stdout
+    eMailBody = mystdout.getvalue().split("\n")
+    if eMailBody[-2] != "All Okay":
+        print(eMailBody)
+        print(eMailBody[-2])
+        print("Something went wrong")
+        sys.exit(-3)
+    # Send email following https://docs.python.org/3/library/email.examples.html
+    import smtplib
+    from email.message import EmailMessage
 
-msg = EmailMessage()
-msg.set_content("\n".join(eMailBody[:-2]))
-msg["Subject"] = f"Pulshe report - {today[:10]}"
-msg["From"] = "r.nandakumar@stfc.ac.uk"
-msg["To"] = "r.nandakumar@rl.ac.uk"
-cc = ["joshua.davies@stfc.ac.uk", "andrew.j.smith@stfc.ac.uk", "maurits.van-der-grinten@stfc.ac.uk",
-    "terry.cornford@stfc.ac.uk"]
-answer = input("Send wide? y/n: ")
-if answer == "y":
-    msg["CC"] = ",".join(cc)
-s = smtplib.SMTP("localhost")
-s.send_message(msg)
-s.quit()
+    msg = EmailMessage()
+    msg.set_content("\n".join(eMailBody[:-2]))
+    msg["Subject"] = f"Pulshe report - {today[:10]}"
+    msg["From"] = "r.nandakumar@stfc.ac.uk"
+    msg["To"] = "raja.nandakumar@stfc.ac.uk"
+    cc = ["joshua.davies@stfc.ac.uk", "andrew.j.smith@stfc.ac.uk", "maurits.van-der-grinten@stfc.ac.uk",
+        "terry.cornford@stfc.ac.uk", "katie.lamb@stfc.ac.uk"]
+    answer = input("Send wide? y/n: ")
+    if answer == "y":
+        msg["CC"] = ",".join(cc)
+    try:
+        s = smtplib.SMTP("localhost")
+        s.send_message(msg)
+        s.quit()
+    except:
+        pass
 
-for line in eMailBody:
-    print(line)
+    for line in eMailBody:
+        print(line)
+
 print("All done")
 print("\nWriting out html output files")
 writeOutTrainings(deptStaff, configuration.config)
-writeOutReports(deptStaff, configuration.config)
-# writeOutRadReport(deptStaff, configuration.config)
-writeOutNonMandReport(deptStaff, configuration.config, "rad_trainings")
-writeOutNonMandReport(deptStaff, configuration.config, "misc_trainings")
-writeOutNonMandReport(deptStaff, configuration.config, "laser_trainings")
-writeOutNonMandReport(deptStaff, configuration.config, "coshh_trainings")
+writeOutReports(deptStaff, configuration.config, workType="staff")
+writeOutReports(deptStaff, configuration.config, workType="student")
+
+if configuration.config["optionalTrainings"]:
+    writeOutNonMandReport(deptStaff, configuration.config, "rad_trainings")
+    writeOutNonMandReport(deptStaff, configuration.config, "misc_trainings")
+    writeOutNonMandReport(deptStaff, configuration.config, "laser_trainings")
+    writeOutNonMandReport(deptStaff, configuration.config, "coshh_trainings")

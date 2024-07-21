@@ -28,9 +28,9 @@ def okayToWrite(conf, uid, radTr):
 def writeOutRadReport(staff, conf, debug=False):
     outDir = "training"
     fileName = outDir + "/ppd-rad-" + str(uuid.uuid4()) + ".html"
-    SHE_sheet_date = staff.SHE_spreadsheet_date
+    sheet_date = staff.Totara_spreadsheet_date
     f = open(fileName, "w")
-    writeOutRadReportHeader(f, conf, SHE_sheet_date)
+    writeOutRadReportHeader(f, conf, sheet_date)
 
     for uid in staff.nList:
         if staff.person[uid]["Location"] != "RAL filtered":
