@@ -256,7 +256,10 @@ class staffMember:
             course = trd["Course Name"]
             # print(course)
             if course.lower().startswith("sc") or course.startswith("Restored"):
-                course = course.split("-")[1].strip()
+                if "-" in course:
+                    course = course.split("-")[1].strip()
+                else:
+                    course = course.split(" ", 1)[1].strip()
             if "BiteSize SHE for " in course:
                 course = course.split("BiteSize SHE for")[-1].strip()
 
@@ -328,10 +331,10 @@ class staffMember:
                 type(date) == type(1.0) or isinstance(date, type(pd.NaT)) or isinstance(date, type(None))
             ):  # Invalid date - enter a simple default
                 self.trainings_status[uid][training] = (stat, "0/0/0", info)
-            elif type(date) == type("a") and "/" not in date:
-                self.trainings_status[uid][training] = (stat, date, info)
+            # elif type(date) == type("a") and "/" not in date:
+            #     print("Parsing .....", parse(str(date)))
+            #     self.trainings_status[uid][training] = (stat, date, info)
             else:
-                # print(date, type(date))
                 self.trainings_status[uid][training] = (
                     stat,
                     parse(str(date)),
