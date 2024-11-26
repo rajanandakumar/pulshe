@@ -90,7 +90,6 @@ if not status:
     sys.exit(-2)
 she_table = pd.read_excel(she_file, engine="openpyxl", sheet_name="Master Data")
 deptStaff.addSHERecords(she_table, configuration.config, fileTime=she_time, debug=debug)
-os.unlink(she_file)  # Clean up
 
 # Get the totara statuses
 print("\nObtaining and processing Totara records")
@@ -131,7 +130,8 @@ if sendEmail:
     msg["Subject"] = f"Pulshe report - {today[:10]}"
     msg["From"] = "r.nandakumar@stfc.ac.uk"
     msg["To"] = "raja.nandakumar@stfc.ac.uk"
-    cc = ["joshua.davies@stfc.ac.uk", "andrew.j.smith@stfc.ac.uk", "maurits.van-der-grinten@stfc.ac.uk",
+    # cc = ["joshua.davies@stfc.ac.uk", "andrew.j.smith@stfc.ac.uk", "maurits.van-der-grinten@stfc.ac.uk",
+    cc = ["joshua.davies@stfc.ac.uk", "maurits.van-der-grinten@stfc.ac.uk", # Removed Andrew Smith on 13 Aug as per email from Katie Lamb
         "terry.cornford@stfc.ac.uk", "katie.lamb@stfc.ac.uk"]
     answer = input("Send wide? y/n: ")
     if answer == "y":
